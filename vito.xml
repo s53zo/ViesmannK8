@@ -1,0 +1,2613 @@
+<?xml version="1.0"?>
+<vito>
+  <devices>
+    <device ID="2053" name="Dummy" protocol="GWG"/>
+    <device ID="20CB" name="Dummy" protocol="P300"/>
+    <device ID="2098" name="Dummy" protocol="KW2"/>
+    <device ID="2094" name="Dummy" protocol="KW2"/>
+    <device ID="204B" name="VBC702-AW" protocol="P300"/>
+    <device ID="2048" name="VBC702-BW" protocol="P300"/>
+    <device ID="204D" name="Vitotronic 200" protocol="KW2"/>
+  </devices>
+  <commands>
+   <command name="getBetriebsmodus" protocmd="getaddr">
+     <addr>B000</addr>
+     <len>1</len>
+     <unit>BA</unit>
+     <description>Betriebsmodus (0=aus, 1=ww, 2=ww+heizen/kühlen, 66=party)</description>
+   </command>
+   <command name="setBetriebsmodus" protocmd="setaddr">
+     <addr>B000</addr>
+     <len>1</len>
+     <unit>BA</unit>
+     <description>Setze Betriebsmodus</description>
+   </command>
+   <command name="getManuellerModus" protocmd="getaddr">
+     <addr>B020</addr>
+     <len>1</len>
+     <unit>BA</unit>
+     <description>Manueller Modus (0=aus, 1=Heizen, 2=1xWWBereitung auf Temp2)</description>
+   </command>
+   <command name="setManuellerModus" protocmd="setaddr">
+     <addr>B020</addr>
+     <len>1</len>
+     <unit>BA</unit>
+     <description>Setze manueller Modus</description>
+   </command>
+   <command name="getKompressorBelastung1" protocmd="getaddr">
+     <addr>1620</addr>
+     <len>2</len>
+     <unit>CS</unit>
+     <description>Stunden Kompressor Belastungsklasse 0-22K</description>
+   </command>
+   <command name="getKompressorBelastung2" protocmd="getaddr">
+     <addr>1622</addr>
+     <len>2</len>
+     <unit>CS</unit>
+     <description>Stunden Kompressor Belastungsklasse 22-32K</description>
+   </command>
+   <command name="getKompressorBelastung3" protocmd="getaddr">
+     <addr>1624</addr>
+     <len>2</len>
+     <unit>CS</unit>
+     <description>Stunden Kompressor Belastungsklasse 32-41K</description>
+   </command>
+   <command name="getKompressorBelastung4" protocmd="getaddr">
+     <addr>1626</addr>
+     <len>2</len>
+     <unit>CS</unit>
+     <description>Stunden Kompressor Belastungsklasse 42-50K</description>
+   </command>
+   <command name="getKompressorBelastung5" protocmd="getaddr">
+     <addr>1628</addr>
+     <len>2</len>
+     <unit>CS</unit>
+     <description>Stunden Kompressor Belastungsklasse 51-99K</description>
+   </command>
+   <command name="getEnergieElektroWW12M" protocmd="getaddr">
+     <addr>1670</addr>
+     <len>4</len>
+     <unit>CS</unit>
+     <description>ElektroEnergie Warmwasser 12 Monate</description>
+   </command>
+   <command name="getEnergieWaermeWW12M" protocmd="getaddr">
+     <addr>1660</addr>
+     <len>4</len>
+     <unit>CS</unit>
+     <description>WaermeEnergie Warmwasser 12 Monate</description>
+   </command>
+   <command name="getEnergieElektroHeizen12M" protocmd="getaddr">
+     <addr>1650</addr>
+     <len>4</len>
+     <unit>CS</unit>
+     <description>ElektroEnergie Heizen 12 Monate</description>
+   </command>
+   <command name="getEnergieWaermeHeizen12M" protocmd="getaddr">
+     <addr>1640</addr>
+     <len>4</len>
+     <unit>CS</unit>
+     <description>WaermeEnergie Heizen 12 Monate</description>
+   </command>
+   <command name="getEnergieElektroWW1W" protocmd="getaddr">
+     <addr>16D0</addr>
+     <len>2</len>
+     <unit>CS</unit>
+     <description>ElektroEnergie Warmwasser 1 Woche</description>
+   </command>
+   <command name="getEnergieWaermeWW1W" protocmd="getaddr">
+     <addr>16D2</addr>
+     <len>2</len>
+     <unit>CS</unit>
+     <description>WaermeEnergie Warmwasser 1 Woche</description>
+   </command>
+   <command name="getEnergieElektroHeizen1W" protocmd="getaddr">
+     <addr>16D1</addr>
+     <len>2</len>
+     <unit>CS</unit>
+     <description>ElektroEnergie Heizen 1 Woche</description>
+   </command>
+   <command name="getEnergieWaermeHeizen1W" protocmd="getaddr">
+     <addr>16D3</addr>
+     <len>2</len>
+     <unit>CS</unit>
+     <description>WaermeEnergie Heizen 1 Woche</description>
+   </command>
+   <command name="getHysterese" protocmd="getaddr">
+     <addr>7304</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Hysterese Einschaltung Heizkreis (0.5 bis 3)</description>
+   </command>
+   <command name="setHysterese" protocmd="setaddr">
+     <addr>7304</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Setze Hysterese Einschaltung Heizkreis</description>
+   </command>
+   <command name="getKuehlkennlinieNiveau" protocmd="getaddr">
+     <addr>7110</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Kühlkennlinie Niveau</description>
+   </command>
+   <command name="setKuehlkennlinieNiveau" protocmd="setaddr">
+     <addr>7110</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Setze Kühlkennlinie Niveau</description>
+   </command>
+   <command name="getKuehlkennlinieSteigung" protocmd="getaddr">
+     <addr>7111</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Kühlkennlinie Steigung</description>
+   </command>
+   <command name="setKuehlkennlinieSteigung" protocmd="setaddr">
+     <addr>7111</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Setze Kühlkennlinie Steigung</description>
+   </command>
+   <command name="getMinVLTempKuehlung" protocmd="getaddr">
+     <addr>7103</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Minimale Vorlauftemperatur Kühlung</description>
+   </command>
+   <command name="setMinVLTempKuehlung" protocmd="setaddr">
+     <addr>7103</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Setze minimale Vorlauftemperatur Kühlung</description>
+   </command>
+   <command name="getTempDiffKuehlung" protocmd="getaddr">
+     <addr>7004</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Temperaturdifferenz Kühlung</description>
+   </command>
+   <command name="setTempDiffKuehlung" protocmd="setaddr">
+     <addr>7004</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Setze Temperaturdifferenz Kühlung</description>
+   </command>
+   <command name="getFreigabeKuehlung" protocmd="getaddr">
+     <addr>71FE</addr>
+     <len>1</len>
+     <unit>ST</unit>
+     <description>Freigabe Kühlung</description>
+   </command>
+   <command name="setFreigabeKuehlung" protocmd="setaddr">
+     <addr>71FE</addr>
+     <len>1</len>
+     <unit>ST</unit>
+     <description>Setze Freigabe Kühlung</description>
+   </command>
+   <command name="getTempDiffHeizung" protocmd="getaddr">
+     <addr>7003</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Temperaturdifferenz Heizung</description>
+   </command>
+   <command name="setTempDiffHeizung" protocmd="setaddr">
+     <addr>7003</addr>
+     <len>4</len>
+     <unit>UT</unit>
+     <description>Setze Temperaturdifferenz Heizung</description>
+   </command>
+   <command name="getHeizleistung" protocmd="getaddr">
+     <addr>16A0</addr>
+     <len>4</len>
+     <unit>PR</unit>
+     <description>Heizleistung</description>
+   </command>
+   <command name="getLeistungsaufnahme" protocmd="getaddr">
+     <addr>16A4</addr>
+     <len>4</len>
+     <unit>PR</unit>
+     <description>Leistungsaufnahme</description>
+   </command>
+   <command name="getEingangstemperaturLuft" protocmd="getaddr">
+     <addr>16B0</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Mittlere Eingangstemperatur Luft</description>
+   </command>
+   <command name="getAusgangstemperaturLuft" protocmd="getaddr">
+     <addr>16B1</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Mittlere Ausgangstemperatur Luft</description>
+   </command>
+   <command name="getCOPWW" protocmd="getaddr">
+     <addr>1691</addr>
+     <len>2</len>
+     <unit>PR</unit>
+     <description>COP Warmwasser</description>
+   </command>
+   <command name="getCOPHeizen" protocmd="getaddr">
+     <addr>1690</addr>
+     <len>2</len>
+     <unit>PR</unit>
+     <description>COP Heizen</description>
+   </command>
+   <command name="getDruckVerdampfer" protocmd="getaddr">
+     <addr>0680</addr>
+     <len>2</len>
+     <unit>PR</unit>
+     <description>Druck im Verdampfer</description>
+   </command>
+   <command name="getDruckKondensator" protocmd="getaddr">
+     <addr>0682</addr>
+     <len>2</len>
+     <unit>PR</unit>
+     <description>Druck im Kondensator</description>
+   </command>
+   <command name="getFreigabeElektroWW" protocmd="getaddr">
+     <addr>6015</addr>
+     <len>1</len>
+     <unit>ST</unit>
+     <description>Freigabe Elektroheizung für WW-Bereitung</description>
+   </command>
+   <command name="getFreigabeHeizElektro" protocmd="getaddr">
+     <addr>7902</addr>
+     <len>1</len>
+     <unit>ST</unit>
+     <description>Heizen mit Elektro</description>
+   </command>
+   <command name="getFreigabeDurchlauferh" protocmd="getaddr">
+     <addr>7900</addr>
+     <len>1</len>
+     <unit>ST</unit>
+     <description>Freigabe Heizwasser-Durchlauferhitzer</description>
+   </command>
+   <command name="getStatusVentilatorstufe1" protocmd="getaddr">
+     <addr>0402</addr>
+     <len>1</len>
+     <unit>ST</unit>
+     <description>Status Ventilatorstufe 1</description>
+   </command>
+   <command name="getStatusVentilatorstufe2" protocmd="getaddr">
+     <addr>0404</addr>
+     <len>1</len>
+     <unit>ST</unit>
+     <description>Status Ventilatorstufe 2</description>
+   </command>
+   <command name="getStatusKaeltekreisumkehr" protocmd="getaddr">
+     <addr>049C</addr>
+     <len>1</len>
+     <unit>ST</unit>
+     <description>Status Kältekreisumkehr</description>
+   </command>
+   <command name="getAussentemperaturRegelung" protocmd="getaddr">
+     <addr>0952</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Aussentemperatur für Regelung</description>
+   </command>
+   <command name="getAussentemperatur1" protocmd="getaddr">
+     <addr>0800</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Aussentemperatur 1</description>
+   </command>
+   <command name="getAussentemperatur2" protocmd="getaddr">
+     <addr>0801</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Aussentemperatur 2</description>
+   </command>
+   <command name="getAussentemperatur3" protocmd="getaddr">
+     <addr>0805</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Aussentemperatur 3</description>
+   </command>
+   <command name="getAussentemperatur4" protocmd="getaddr">
+     <addr>081D</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Aussentemperatur 4</description>
+   </command>
+   <command name="getAussentemperatur5" protocmd="getaddr">
+     <addr>081E</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Aussentemperatur 5</description>
+   </command>
+   <command name="getRaumtemperaturIST" protocmd="getaddr">
+     <addr>0116</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Raumtemperatur ist Vitotrol HK1</description>
+   </command>
+   <command name="getRaumtemperaturParty" protocmd="getaddr">
+     <addr>2022</addr>
+     <len>2</len>
+     <unit>UT</unit>
+     <description>Raumtemperatur im Partybetrieb HeizkreisA1/HK1</description>
+   </command>
+   <command name="getJAZgesamt" protocmd="getaddr">
+     <addr>1680</addr>
+     <len>2</len>
+     <unit>PR</unit>
+     <description>Jahresarbeitszahl Gesamt</description>
+   </command>
+   <command name="getJAZHeizen" protocmd="getaddr">
+     <addr>1681</addr>
+     <len>2</len>
+     <unit>PR</unit>
+     <description>Jahresarbeitszahl Heizen</description>
+   </command>
+   <command name="getJAZWW" protocmd="getaddr">
+     <addr>1682</addr>
+     <len>2</len>
+     <unit>PR</unit>
+     <description>Jahresarbeitszahl Warmwasser</description>
+   </command>
+
+
+    <command name="getStatusQuellePri1" protocmd="getaddr">
+      <description>Ermittle Schaltungen Sekundärquelle</description>
+      <addr>0482</addr>
+      <len>1</len>
+      <unit>RT</unit>
+    </command>
+
+    <command name="getAnzQuelleSek" protocmd="getaddr">
+      <description>Ermittle Schaltungen Sekundärquelle</description>
+      <addr>0504</addr>
+      <len>4</len>
+      <unit>CO</unit>
+    </command>
+    <command name="getAnzHeizstabSt1" protocmd="getaddr">
+      <description>Ermittle Schaltungen Heizstab Stufe 1</description>
+      <addr>0508</addr>
+      <len>4</len>
+      <unit>CO</unit>
+    </command>
+    <command name="getAnzHeizstabSt2" protocmd="getaddr">
+      <description>Ermittle Schaltungen Heizstab Stufe 2</description>
+      <addr>0509</addr>
+      <len>4</len>
+      <unit>CO</unit>
+    </command>
+    <command name="getAnzHK" protocmd="getaddr">
+      <description>Ermittle Schaltungen Heizkreis</description>
+      <addr>050D</addr>
+      <len>4</len>
+      <unit>CO</unit>
+    </command>
+    <command name="getStatusZirkPumpe" protocmd="getaddr">
+      <addr>0490</addr>
+      <len>1</len>
+      <unit>BST</unit>
+      <description>Status Zirkulationspumpe</description>
+    </command>
+    <command name="getStatusVerdichter" protocmd="getaddr">
+      <addr>0480</addr>
+      <len>1</len>
+      <unit>BST</unit>
+      <description>Status Verdichter</description>
+    </command>
+    <command name="getStatusVentilWW" protocmd="getaddr">
+      <addr>0494</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Status 3W Ventil</description>
+    </command>
+    <command name="getEHeizungStufe1BS" protocmd="getaddr">
+      <description>Ermittle die Betriebsstunden der E-Heizung Stufe 1</description>
+      <addr>0588</addr>
+      <len>4</len>
+      <unit>CS</unit>
+    </command>
+    <command name="getEHeizungStufe2BS" protocmd="getaddr">
+      <description>Ermittle die Betriebsstunden der E-Heizung Stufe 2</description>
+      <addr>0589</addr>
+      <len>4</len>
+      <unit>CS</unit>
+    </command>
+    <command name="getHK1PumpeBS" protocmd="getaddr">
+      <description>Ermittle die Betriebsstunden der HK1 Pumpe</description>
+      <addr>058D</addr>
+      <len>4</len>
+      <unit>CS</unit>
+    </command>
+    <command name="getVerdichter1BS" protocmd="getaddr">
+      <description>Ermittle die Betriebsstunden von Verdichter 1</description>
+      <addr>05A8</addr>
+      <len>4</len>
+      <unit>CS</unit>
+    </command>
+    <command name="getVerdichter2BS" protocmd="getaddr">
+      <description>Ermittle die Betriebsstunden von Verdichter 2</description>
+      <addr>05A9</addr>
+      <len>4</len>
+      <unit>CS</unit>
+    </command>
+    <command name="getVorlaufTemp1" protocmd="getaddr">
+      <description>Vorlauftemperatur Prim&#xE4;rquelle</description>
+      <addr>010A</addr>
+      <len>2</len>
+      <unit>UT</unit>
+    </command>
+    <command name="getRuecklaufTemp1" protocmd="getaddr">
+      <description>R&#xFC;cklauftemperatur Prim&#xE4;rquelle</description>
+      <addr>01C4</addr>
+      <len>2</len>
+      <unit>UT</unit>
+    </command>
+    <command name="getEEV1" protocmd="getaddr">
+      <description>Ermittle Schaltungen Verdichter</description>
+      <addr>0529</addr>
+      <len>4</len>
+      <unit>CO</unit>
+    </command>
+    <command name="getTempA" protocmd="getaddr">
+      <addr>0101</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Aussentemperatur in Grad C</description>
+    </command>
+    <!-- WARMWASSER -->
+    <command name="getTempWWObenIst" protocmd="getaddr">
+      <addr>010D</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Warmwassertemperatur Oben in Grad C
+      </description>
+    </command>
+    <command name="getTempWWUntenIst" protocmd="getaddr">
+      <addr>010E</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Warmwassertemperatur Unten in Grad C</description>
+    </command>
+    <command name="getTempWWsoll" protocmd="getaddr">
+      <addr>6000</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Warmwassersolltemperatur in Grad C</description>
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 2010 -->
+    <command name="setTempWWsoll" protocmd="setaddr">
+      <addr>6000</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Setze die Warmwassersolltemperatur in Grad C</description>
+    </command>
+    <command name="getWWBereitung" protocmd="getaddr">
+      <addr>B020</addr>
+      <len>1</len>
+      <unit>WW</unit>
+      <description>Ermittle einmalige Warmwasser Aufbereitung Temp2</description>
+    </command>
+    <command name="setWWBereitung" protocmd="setaddr">
+      <addr>B020</addr>
+      <len>1</len>
+      <unit>WW</unit>
+      <description>Setze einmalige Warmwasser Aufbereitung Temp2</description>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 2010 Was ist die WW-Auslauftemperatur -->
+    <command name="getTempStp2" protocmd="getaddr">
+      <addr>0814</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die WW Auslauftemperatur in Grad C (Tiefpass)</description>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 25.08.2011 -->
+    <command name="getWWUWPNachlauf" protocmd="getaddr">
+      <addr>6762</addr>
+      <len>2</len>
+      <unit>CO</unit>
+      <description>Ermittle Warmwasserpumpennachlauf </description>
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 25.08.2011 -->
+    <command name="setWWUWPNachlauf" protocmd="setaddr">
+      <addr>6762</addr>
+      <len>2</len>
+      <unit>CO</unit>
+      <description>Setze Warmwasserpumpennachlauf</description>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 19.09.2011 -->
+    <command name="getSpeichervorrang" protocmd="getaddr">
+      <addr>27A2</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Ermittle den Status Speichervorrang Heizkreis ohne
+				Mischer A1 bzw. mit Mischer M1</description>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 19.09.2011 -->
+    <command name="setSpeichervorrang" protocmd="setaddr">
+      <addr>27A2</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Setze den Status Speichervorrang Heizkreis ohne Mischer
+				A1 bzw. mit Mischer M1</description>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="getSpeichervorrangM2" protocmd="getaddr">
+      <addr>37A2</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Ermittle den Status Speichervorrang Heizkreis mit
+				Mischer M2</description>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="setSpeichervorrangM2" protocmd="setaddr">
+      <addr>37A2</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Setze den Status Speichervorrang Heizkreis mit Mischer
+				M2</description>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="getSpeichervorrangM3" protocmd="getaddr">
+      <addr>47A2</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Ermittle den Status Speichervorrang Heizkreis mit
+				Mischer M3</description>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="setSpeichervorrangM3" protocmd="setaddr">
+      <addr>47A2</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Setze den Status Speichervorrang Heizkreis mit Mischer
+				M3</description>
+    </command>
+    <!-- HEIZKURVEN -->
+    <command name="getNeigungHK1" protocmd="getaddr">
+      <addr>2007</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Ermittle Neigung Heizkennlinie HK1</description>
+    </command>
+    <command name="getNeigungHK2" protocmd="getaddr">
+      <addr>3007</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Ermittle Neigung Heizkennlinie M2</description>
+    </command>
+    <command name="getNiveauHK1" protocmd="getaddr">
+      <addr>2006</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Ermittle Niveau Heizkennlinie HK1</description>
+    </command>
+    <command name="getNiveauHK2" protocmd="getaddr">
+      <addr>3006</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Ermittle Niveau Heizkennlinie M2</description>
+    </command>
+    <command name="setNeigungHK1" protocmd="setaddr">
+      <!-- min zul.0.2 0.1 und 0.0 nicht erlaubt ceteris paribus 27.10.2011 -->
+      <addr>2007</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Setze Neigung Heizkennlinie HK1</description>
+    </command>
+    <command name="setNeigungHK2" protocmd="setaddr">
+      <!-- min zul.0.2 0.1 und 0.0 nicht erlaubt ceteris paribus 27.10.2011 -->
+      <addr>3007</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Setze Neigung Heizkennlinie HK2</description>
+    </command>
+    <command name="setNiveauHK1" protocmd="setaddr">
+      <addr>2006</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Setze Niveau Heizkennlinie HK1</description>
+    </command>
+    <command name="setNiveauHK2" protocmd="setaddr">
+      <addr>3006</addr>
+      <len>2</len>
+      <unit>UN</unit>
+      <description>Setze Niveau Heizkennlinie HK2</description>
+    </command>
+    <!-- HEIZKREISE -->
+    <command name="getTempVL" protocmd="getaddr">
+      <addr>0105</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Vorlauftemperatur in Grad C
+      </description>
+    </command>
+    <command name="getTempRL" protocmd="getaddr">
+      <addr>0106</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die R&#xFC;cklauftemperatur in Grad C
+      </description>
+    </command>
+    <command name="getTempVListHK1" protocmd="getaddr">
+      <addr>0103</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Vorlauftemperatur HK1 in Grad C
+      </description>
+    </command>
+    <command name="getTempRListHK1" protocmd="getaddr">
+      <addr>0104</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die R&#xFC;cklauftemperatur HK1 in Grad C
+      </description>
+    </command>
+    <command name="getTempVListHK2" protocmd="getaddr">
+      <addr>01D4</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Vorlauftemperatur HK2 in Grad C
+      </description>
+    </command>
+    <command name="getTempVLsollHK1" protocmd="getaddr">
+      <addr>1800</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Vorlaufsolltemperatur HK1 in Grad C
+      </description>
+    </command>
+    <command name="getTempVLsollM2" protocmd="getaddr">
+      <addr>1801</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Vorlaufsolltemperatur M2 in Grad C
+      </description>
+    </command>
+    <command name="getTempRL17A" protocmd="getaddr">
+      <addr>080A</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Ruecklauftemperatur 17A in Grad C
+      </description>
+      <device ID="2053"/>
+      <!-- Device 20CB eingefuegt von ceteris paribus 2010 -->
+      <device ID="20CB">
+        <addr>0808</addr>
+        <len>2</len>
+        <unit>UT</unit>
+      </device>
+    </command>
+    <!-- SPEICHER1 -->
+    <command name="getTempSpu" protocmd="getaddr">
+      <addr>6566</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Speichertemperatur unten in Grad C
+      </description>
+      <device ID="2053"/>
+    </command>
+    <command name="getTempStp" protocmd="getaddr">
+      <addr>0812</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Speichertemperatur in Grad C (Tiefpass)
+      </description>
+      <device ID="2053"/>
+      <device ID="2098"/>
+    </command>
+    <!-- SOLLTEMPERATUREN -->
+    <command name="getTempRaumNorSollM1" protocmd="getaddr">
+      <addr>2306</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die Raumsolltemperatur normal M1 in Grad C
+      </description>
+      <device ID="2053">
+        <addr>53</addr>
+        <len>1</len>
+        <unit>UTI</unit>
+      </device>
+    </command>
+    <!-- set Befehl setTempRaumNorSollM1 eingefuegt von ceteris paribus 13.10.2012 -->
+    <!-- Aufruf in vclient ganzzahlig 'setTempRaumNorSollM1 21' -->
+    <command name="setTempRaumNorSollM1" protocmd="setaddr">
+      <addr>2000</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die Raumsolltemperatur normal M1 in Grad C
+      </description>
+      <device ID="2053">
+        <addr>53</addr>
+        <len>1</len>
+        <unit>UTI</unit>
+      </device>
+    </command>
+    <command name="getTempRaumNorSollM2" protocmd="getaddr">
+      <addr>3000</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die Raumsolltemperatur normal M2 in Grad C
+      </description>
+      <device ID="2053"/>
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 20.12.2011 geht noch nicht -->
+    <!-- set Befehl Adressen korrigiert von ceteris paribus 13.10.2012 -->
+    <!-- Aufruf in vclient ganzzahlig 'setTempRaumNorSollM2 21' -->
+    <command name="setTempRaumNorSollM2" protocmd="setaddr">
+      <addr>3000</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die Raumsolltemperatur normal M2 in Grad C
+      </description>
+    </command>
+    <command name="getTempRaumRedSollM1" protocmd="getaddr">
+      <addr>2000</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die Raumsolltemperatur reduziert M1 in Grad C
+      </description>
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 13.10.2012 -->
+    <command name="setTempRaumRedSollM1" protocmd="setaddr">
+      <addr>2307</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die Raumsolltemperatur reduziert M1 in Grad C
+      </description>
+    </command>
+    <command name="getTempRaumRedSollM2" protocmd="getaddr">
+      <addr>3307</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die Raumsolltemperatur reduziert M2 in Grad C
+      </description>
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 2010 -->
+    <command name="setTempRaumRedSollM2" protocmd="setaddr">
+      <addr>3307</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die Raumsolltemperatur reduziert M2 in Grad C
+      </description>
+    </command>
+    <!-- PUMPEN -->
+    <command name="getPumpeStatusM1" protocmd="getaddr">
+      <addr>2906</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle den Status der Pumpe M1</description>
+      <device ID="2053" protocmd="getpaddr">
+        <addr>01</addr>
+        <len>1</len>
+        <bit>0</bit>
+        <unit>BST</unit>
+      </device>
+      <!-- Device 20CB eingefuegt von ceteris paribus 2010 -->
+      <device ID="20CB">
+        <addr>7663</addr>
+        <len>2</len>
+        <unit>PR2</unit>
+      </device>
+    </command>
+    <command name="getPumpeStatusM2" protocmd="getaddr">
+      <addr>3906</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle den Status der Pumpe M2</description>
+      <device ID="2053"/>
+      <!-- Device 20CB eingefuegt von ceteris paribus 2010 -->
+      <device ID="20CB">
+        <addr>7665</addr>
+        <len>1</len>
+        <unit>RT</unit>
+      </device>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 2010 -->
+    <command name="getPumpeDrehzahlM2" protocmd="getaddr">
+      <addr>3906</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle die Drehzahl der Pumpe M2</description>
+      <device ID="2053"/>
+      <!-- Device 20CB eingefuegt von ceteris paribus 2010 -->
+      <device ID="20CB">
+        <addr>7665</addr>
+        <len>2</len>
+        <unit>PR2</unit>
+      </device>
+    </command>
+    <command name="getLZSNH" protocmd="getaddr">
+      <description>Ermittle die Betriebsstunden der WP</description>
+      <addr>058A</addr>
+      <len>4</len>
+      <unit>CS</unit>
+    </command>
+    <command name="getLZAC" protocmd="getaddr">
+      <description>Ermittle die Betriebsstunden der WP</description>
+      <addr>058C</addr>
+      <len>4</len>
+      <unit>CS</unit>
+    </command>
+    <command name="getLZPumpe" protocmd="getaddr">
+      <description>Ermittle die Betriebsstunden der WP</description>
+      <addr>058D</addr>
+      <len>4</len>
+      <unit>CS</unit>
+    </command>
+    <command name="getLZWP" protocmd="getaddr">
+      <description>Ermittle die Betriebsstunden der WP</description>
+      <addr>5005</addr>
+      <len>4</len>
+      <unit>CS</unit>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 2010 -->
+    <command name="getPumpeStatusIntern" protocmd="getaddr">
+      <description>Ermittle den Status der Internen Pumpe</description>
+      <device ID="20CB">
+        <addr>7660</addr>
+        <len>1</len>
+        <unit>RT</unit>
+      </device>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 2010 -->
+    <command name="getPumpeDrehzahlIntern" protocmd="getaddr">
+      <addr>3906</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle die Drehzahl der Internen Pumpe</description>
+      <device ID="2053"/>
+      <device ID="20CB">
+        <addr>7660</addr>
+        <len>2</len>
+        <unit>PR2</unit>
+      </device>
+    </command>
+    <command name="getPumpeStatusSp" protocmd="getaddr">
+      <addr>0845</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle den Status der Speicherladepumpe</description>
+      <device ID="2053"/>
+      <!-- Device 20CB eingefuegt von ceteris paribus 2010 -->
+      <device ID="20CB">
+        <addr>6513</addr>
+        <len>1</len>
+        <unit>RT</unit>
+      </device>
+    </command>
+    <command name="getPumpeStatusHK1" protocmd="getaddr">
+      <addr>048D</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle den Status der Heizkreispumpe HK1</description>
+    </command>
+    <command name="getPumpeStatusZirku" protocmd="getaddr">
+      <addr>0846</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle den Status der Zirkulationspumpe</description>
+      <device ID="2053" protocmd="getpaddr">
+        <addr>01</addr>
+        <len>1</len>
+        <bit>2</bit>
+        <unit>BST</unit>
+      </device>
+      <!-- Device 20CB eingefuegt von ceteris paribus 2010 -->
+      <device ID="20CB">
+        <addr>6515</addr>
+        <len>1</len>
+        <unit>RT</unit>
+      </device>
+    </command>
+    <command name="getPumpeStatusSolar" protocmd="getaddr">
+      <addr>6552</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle den Status der Umwaelzpumpe Solar</description>
+      <device ID="2053"/>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 2010 -->
+    <command name="getPumpeDrehzahlSolar" protocmd="getaddr">
+      <addr>6552</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle die Drehzahl der Internen Pumpe</description>
+      <device ID="2053"/>
+      <!-- Device 20CB eingefuegt von ceteris paribus 2010 -->
+      <device ID="20CB">
+        <addr>6552</addr>
+        <len>2</len>
+        <unit>PR2</unit>
+      </device>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 2010 GEHT NICHT -->
+    <command name="getPumpeStatusSolar2" protocmd="getaddr">
+      <addr>6553</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle den Status der Pumpe 2 Solar </description>
+      <device ID="2053"/>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 2010 GEHT NICHT -->
+    <command name="getPumpeStatusSolar3" protocmd="getaddr">
+      <addr>6554</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle den Status der Pumpe 3 Solar </description>
+      <device ID="2053"/>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 2010 GEHT NICHT -->
+    <command name="getPumpeStatusSolar4" protocmd="getaddr">
+      <addr>6555</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ermittle den Status der Pumpe 4 Solar </description>
+      <device ID="2053"/>
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 2010 -->
+    <command name="getTempSTSSOL" protocmd="getaddr">
+      <addr>081A</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>Ermittle die Speichertemperatur in Grad C
+				(NRF_TiefpassTemperaturwert_STSSOL)</description>
+      <device ID="2053"/>
+      <device ID="2098"/>
+    </command>
+    <!-- MISCHER -->
+    <command name="getMischerM1" protocmd="getaddr">
+      <addr>254C</addr>
+      <len>1</len>
+      <unit>PR</unit>
+      <description>Ermittle Mischerposition M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getMischerM2" protocmd="getaddr">
+      <addr>354C</addr>
+      <len>1</len>
+      <unit>PR</unit>
+      <description>Ermittle Mischerposition M2</description>
+      <device ID="2053"/>
+      <!-- Device 20CB eingefuegt von ceteris paribus 2010 -->
+      <device ID="20CB">
+        <addr>354C</addr>
+        <len>1</len>
+        <unit>PR</unit>
+      </device>
+    </command>
+    <command name="getMischerM3" protocmd="getaddr">
+      <addr>454C</addr>
+      <len>1</len>
+      <unit>PR</unit>
+      <description>Ermittle Mischerposition M3</description>
+      <device ID="2053"/>
+    </command>
+    <!-- BETRIEBSARTEN -->
+    <command name="getBetriebArtHK1" protocmd="getaddr">
+      <addr>B000</addr>
+      <len>1</len>
+      <unit>BA</unit>
+      <description>Betriebsart HK1</description>
+      <device ID="2053">
+        <addr>51</addr>
+        <len>1</len>
+        <unit>BA</unit>
+      </device>
+    </command>
+    <command name="setBetriebArtHK1" protocmd="setaddr">
+      <addr>B000</addr>
+      <len>1</len>
+      <unit>BA</unit>
+      <description>Setze Betriebsart HK1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getBetriebArt" protocmd="getaddr">
+      <addr>2301</addr>
+      <len>1</len>
+      <unit>BA</unit>
+      <description>Betriebsart</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getBetriebArtHK2" protocmd="getaddr">
+      <addr>B001</addr>
+      <len>1</len>
+      <unit>BA</unit>
+      <description>Betriebsart HK2</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getJAZ" protocmd="getaddr">
+      <addr>1680</addr>
+      <len>2</len>
+      <unit>CO</unit>
+      <description>Jahresarbeitszahl</description>
+    </command>
+    <command name="getJAZHeiz" protocmd="getaddr">
+      <addr>1681</addr>
+      <len>2</len>
+      <unit>CO</unit>
+      <description>Jahresarbeitszahl</description>
+    </command>
+    <command name="getJAZWW" protocmd="getaddr">
+      <addr>1682</addr>
+      <len>2</len>
+      <unit>CO</unit>
+      <description>Jahresarbeitszahl</description>
+    </command>
+    <!-- SPARBETRIEB (SPARSCHWEIN) -->
+    <command name="getBetriebSparM1" protocmd="getaddr">
+      <addr>2302</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Betriebsart Spar M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getBetriebSparM2" protocmd="getaddr">
+      <addr>3302</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Betriebsart Spar M2</description>
+      <device ID="2053"/>
+    </command>
+    <!-- PARTYBETRIEB -->
+    <command name="getBetriebPartyM1" protocmd="getaddr">
+      <addr>2303</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Betriebsart Party HK1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getBetriebPartyM2" protocmd="getaddr">
+      <addr>3303</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Betriebsart Party HK2</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getTempPartyHK1" protocmd="getaddr">
+      <addr>2022</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Solltemperatur Partybetrieb HK1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTempPartyHK1" protocmd="setaddr">
+      <addr>2022</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Setze die Warmwassersolltemperatur Party M1 in Grad C
+      </description>
+      <device ID="2053"/>
+    </command>
+    <command name="getTempPartyHK2" protocmd="getaddr">
+      <addr>3022</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Solltemperatur Partybetrieb HK2</description>
+    </command>
+    <command name="setTempPartyHK2" protocmd="setaddr">
+      <addr>3022</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Setze die Warmwassersolltemperatur Party HK2 in Grad C
+      </description>
+    </command>
+    <command name="setBetriebPartyM1" protocmd="setaddr">
+      <addr>2303</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Setze Betriebsart Party M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setBetriebPartyM2" protocmd="setaddr">
+      <addr>3303</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Setze Betriebsart Party M2</description>
+      <device ID="2053"/>
+    </command>
+    <!-- EXTERNES SPERREN und ANFORDERN -->
+    <command name="getEinflussExtSperren" protocmd="getaddr">
+      <addr>5732</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Einfluss Extern Sperren auf Pumpen</description>
+    </command>
+    <command name="getEinflussExtAnforderung" protocmd="getaddr">
+      <addr>5734</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Einfluss Externe Anforderung auf Pumpen</description>
+    </command>
+    <command name="getExtSperren" protocmd="getaddr">
+      <addr>0A81</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ist Extern Sperren aktiv</description>
+    </command>
+    <command name="getExtAnforderung" protocmd="getaddr">
+      <addr>0A80</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Ist Externe Anforderung aktiv</description>
+    </command>
+    <!-- FROSTSCHUTZ -->
+    <command name="getStatusFrostM1" protocmd="getaddr">
+      <addr>2500</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Status Frostwarnung M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getStatusFrostM2" protocmd="getaddr">
+      <addr>3500</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Status Frostwarnung M2</description>
+      <device ID="2053"/>
+    </command>
+    <!-- STOERUNG -->
+    <command name="getStatusStoerung" protocmd="getaddr">
+      <addr>7579</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Status Sammelstoerung</description>
+      <device ID="2053"/>
+      <device ID="20CB">
+        <addr>0A82</addr>
+        <len>1</len>
+        <unit>RT</unit>
+      </device>
+    </command>
+    <command name="getError0" protocmd="getaddr">
+      <addr>7507</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 1</description>
+      <device ID="2053">
+        <addr>3F</addr>
+        <len>1</len>
+        <unit>ESG</unit>
+      </device>
+    </command>
+    <command name="getError1" protocmd="getaddr">
+      <addr>7510</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 2</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getError2" protocmd="getaddr">
+      <addr>7519</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 3</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getError3" protocmd="getaddr">
+      <addr>7522</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 4</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getError4" protocmd="getaddr">
+      <addr>752B</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 5</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getError5" protocmd="getaddr">
+      <addr>7534</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 6</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getError6" protocmd="getaddr">
+      <addr>753D</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 7</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getError7" protocmd="getaddr">
+      <addr>7546</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 8</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getError8" protocmd="getaddr">
+      <addr>754F</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 9</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getError9" protocmd="getaddr">
+      <addr>7558</addr>
+      <len>9</len>
+      <unit>ES</unit>
+      <description>Ermittle Fehlerhistory Eintrag 10</description>
+      <device ID="2053"/>
+    </command>
+    <!-- SYSTEMZEIT -->
+    <command name="getSystemTime" protocmd="getaddr">
+      <addr>088E</addr>
+      <len>8</len>
+      <unit>TI</unit>
+      <description>Ermittle Systemzeit</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setSystemTime" protocmd="setaddr">
+      <addr>088E</addr>
+      <len>8</len>
+      <unit>TI</unit>
+      <description>Setze Systemzeit</description>
+      <device ID="2053"/>
+    </command>
+    <!-- KONFIGURATION UND SETZEN -->
+    <!-- xxx Heizkreispumpenlogik-Funktion xxx -->
+    <!-- eingefuegt von ceteris paribus 27.09.2011 -->
+    <!-- A5:0 Ohne Heizkreispumpenlogik-Funktion Mit Heizkreispumpenlogik−Funktion: 
+			Heizkreispumpe aus, wenn A5:1 AT > RTSoll + 5 K A5:2 AT > RTSoll + 4 K A5:3 
+			AT > RTSoll + 3 K A5:4 AT > RTSoll + 2 K A5:5 AT > RTSoll + 1 K A5:6 AT = 
+			RTSoll A5:7 AT > RTSoll -1 K bis A5:15 AT > RTSoll -9 K -->
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="getKA5" protocmd="getaddr">
+      <addr>27A5</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die Heizkreispumpenlogik&#x2212;Funktion</description>
+      <!-- KA5_KonfSommersparSchaltschwelle A5 0x27a5 -->
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="setKA5" protocmd="setaddr">
+      <addr>27A5</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die Heizkreispumpenlogik&#x2212;Funktion</description>
+      <!-- KA5_KonfSommersparSchaltschwelle A5 0x27a5 1Byte -->
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="getKA5M2" protocmd="getaddr">
+      <addr>37A5</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die Heizkreispumpenlogik&#x2212;Funktion M2
+      </description>
+      <!-- KA5_KonfSommersparSchaltschwelleM2 A5 0x37a5 -->
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="setKA5M2" protocmd="setaddr">
+      <addr>37A5</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die Heizkreispumpenlogik&#x2212;Funktion M2</description>
+      <!-- KA5_KonfSommersparSchaltschwelleM2 A5 0x37a5 1Byte -->
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="getKA5M3" protocmd="getaddr">
+      <addr>47A5</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die Heizkreispumpenlogik&#x2212;Funktion M3
+      </description>
+      <!-- KA5_KonfSommersparSchaltschwelleM2 A5 0x47a5 -->
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="setKA5M3" protocmd="setaddr">
+      <addr>47A5</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die Heizkreispumpenlogik&#x2212;Funktion M3</description>
+      <!-- KA5_KonfSommersparSchaltschwelleM2 A5 0x47a5 1Byte -->
+    </command>
+    <!-- xxx Konfiguration A6 Erweiterte Sparschaltung xxx -->
+    <!-- KA6_KonfiAbsolutSommersparM2 A6 0x37a6 -->
+    <!-- A6:36 Erweiterte Sparschaltung nicht aktiv A6:5 bis A6:35 Erweiterte 
+			Sparschaltung aktiv, d.h. bei einem variabel einstellbaren Wert von 5 bis 
+			35 ºC zuzüglich 1ºC werden Brenner und Heizkreispumpe ausgeschaltet. Grundlage 
+			ist die gedämpfte Außentemperatur, die sich aus tatsächlicher Außentemperatur 
+			und einer Zeitkonstanten, die das Auskühlen eines durchschnittlichen Gebäudes 
+			berücksichtigt, zusammensetzt. -->
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="getKA6" protocmd="getaddr">
+      <addr>27A6</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die AbsolutSommersparschaltung </description>
+      <!-- KA6_KonfiAbsolutSommerspar A6 0x27a6 -->
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="setKA6" protocmd="setaddr">
+      <addr>27A6</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die AbsolutSommersparschaltung</description>
+      <!-- KA6_KonfiAbsolutSommerspar A6 0x27a6 -->
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="getKA6M2" protocmd="getaddr">
+      <addr>37A6</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die AbsolutSommersparschaltung M2</description>
+      <!-- KA6_KonfiAbsolutSommersparM2 A6 0x37a6 -->
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="setKA6M2" protocmd="setaddr">
+      <addr>37A6</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die AbsolutSommersparschaltung M2</description>
+      <!-- KA6_KonfiAbsolutSommersparM2 A6 0x37a6 1Byte -->
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="getKA6M3" protocmd="getaddr">
+      <addr>47A6</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die AbsolutSommersparschaltung M3</description>
+      <!-- KA6_KonfiAbsolutSommersparM3 A6 0x47a6 -->
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 27.09.2011 -->
+    <command name="setKA6M3" protocmd="setaddr">
+      <addr>47A6</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die AbsolutSommersparschaltung M3</description>
+      <!-- KA6_KonfiAbsolutSommersparM3 A6 0x47a6 1Byte -->
+    </command>
+    <!-- Auswirkung Mischer auf interne Pumpe -->
+    <!-- get Befehl eingefuegt von ceteris paribus 26.09.2011 -->
+    <command name="getKonfiWirkung_aufPumpe" protocmd="getaddr">
+      <addr>37A8</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Ermittle Einfluss Mischer auf int UWP</description>
+      <!-- 0 ohne 1 M2 setzt Anforderung an Int.Pumpe - nur sinnvoll bei Mischerkreis -->
+      <!-- wenn nicht vorhanden Rückgabewert -1.0 -->
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 26.09.2011 -->
+    <command name="setKonfiWirkung_aufPumpe" protocmd="setaddr">
+      <addr>37A8</addr>
+      <len>1</len>
+      <unit>ST</unit>
+      <description>Setze Einfluss Mischer auf int UWP</description>
+      <!-- 0 ohne 1 M2 setzt Anforderung an Int.Pumpe - nur sinnvoll bei Mischerkreis -->
+      <!-- wenn nicht vorhanden Rückgabewert -1.0 -->
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 14.11.2011 -->
+    <command name="getKA3_KonfiFrostgrenzeM1_GWG" protocmd="getaddr">
+      <addr>27A3</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die eingestellte Frostgrenze A1M1</description>
+      <!-- Range GradCelsius SByte 1 -9 15 -->
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 14.11.2011 -->
+    <command name="setKA3_KonfiFrostgrenzeM1_GWG" protocmd="setaddr">
+      <addr>27A3</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die Frostgrenze A1M1</description>
+      <!-- Range GradCelsius SByte 1 -9 15 -->
+    </command>
+    <!-- get Befehl eingefuegt von ceteris paribus 26.09.2011 -->
+    <command name="getKA3_KonfiFrostgrenzeM2_GWG" protocmd="getaddr">
+      <addr>37A3</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Ermittle die eingestellte Frostgrenze</description>
+      <!-- Range GradCelsius SByte 1 -9 15 -->
+    </command>
+    <!-- set Befehl eingefuegt von ceteris paribus 26.09.2011 -->
+    <command name="setKA3_KonfiFrostgrenzeM2_GWG" protocmd="setaddr">
+      <addr>37A3</addr>
+      <len>1</len>
+      <unit>UTI</unit>
+      <description>Setze die Frostgrenze</description>
+      <!-- Range GradCelsius SByte 1 -9 15 -->
+    </command>
+    <command name="setPumpeStatusZirku" protocmd="setaddr">
+      <addr>0846</addr>
+      <len>1</len>
+      <unit>RT</unit>
+      <description>Setze den Status der Zirkulationspumpe</description>
+      <device ID="2053">
+        <addr>01</addr>
+        <len>1</len>
+        <bit>2</bit>
+        <precommand>getPumpeStatusZirku</precommand>
+        <unit>BA</unit>
+      </device>
+    </command>
+    <command name="getRaum" protocmd="getaddr">
+      <addr>2000</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>RaumtemperaturSol
+      </description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM1Di" protocmd="setaddr">
+      <addr>2008</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Dienstag M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM1Mi" protocmd="setaddr">
+      <addr>2010</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Mittwoch M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM1Do" protocmd="setaddr">
+      <addr>2018</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Donnerstag M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM1Fr" protocmd="setaddr">
+      <addr>2020</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Freitag M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM1Sa" protocmd="setaddr">
+      <addr>2028</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Samstag M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM1So" protocmd="setaddr">
+      <addr>2030</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Sonntag M1</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getRaum2" protocmd="getaddr">
+      <addr>3000</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>RaumtemperaturSol2
+      </description>
+      <device ID="2053"/>
+    </command>
+     <command name="setRaum2" protocmd="setaddr">
+      <addr>3000</addr>
+      <len>2</len>
+      <unit>UT</unit>
+      <description>RaumtemperaturSol2
+      </description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM2Di" protocmd="setaddr">
+      <addr>3008</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Dienstag M2</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM2Mi" protocmd="setaddr">
+      <addr>3010</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Mittwoch M2</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM2Do" protocmd="setaddr">
+      <addr>3018</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Donnerstag M2</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM2Fr" protocmd="setaddr">
+      <addr>3020</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Freitag M2</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM2Sa" protocmd="setaddr">
+      <addr>3028</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Samstag M2</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerM2So" protocmd="setaddr">
+      <addr>3030</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Sonntag M2</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerWWMo" protocmd="setaddr">
+      <addr>2100</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Montag Warmwasser</description>
+      <device ID="2053"/>
+    </command>
+    <command name="getTimerWWMo" protocmd="getaddr">
+      <addr>2100</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Montag Warmwasser setzen</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerWWDi" protocmd="setaddr">
+      <addr>2108</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Dienstag Warmwasser</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerWWMi" protocmd="setaddr">
+      <addr>2110</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Mittwoch Warmwasser</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerWWDo" protocmd="setaddr">
+      <addr>2118</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Donnerstag Warmwasser</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerWWFr" protocmd="setaddr">
+      <addr>2120</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Freitag Warmwasser</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerWWSa" protocmd="setaddr">
+      <addr>2128</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Samstag Warmwasser</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerWWSo" protocmd="setaddr">
+      <addr>2130</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Sonntag Warmwasser</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerZirkuMo" protocmd="setaddr">
+      <addr>2200</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Montag Zirku</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerZirkuDi" protocmd="setaddr">
+      <addr>2208</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Dienstag Zirku</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerZirkuMi" protocmd="setaddr">
+      <addr>2210</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Mittwoch Zirku</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerZirkuDo" protocmd="setaddr">
+      <addr>2218</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Donnerstag Zirku</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerZirkuFr" protocmd="setaddr">
+      <addr>2220</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Freitag Zirku</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerZirkuSa" protocmd="setaddr">
+      <addr>2228</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Samstag Zirku</description>
+      <device ID="2053"/>
+    </command>
+    <command name="setTimerZirkuSo" protocmd="setaddr">
+      <addr>2230</addr>
+      <len>8</len>
+      <unit>CT</unit>
+      <description>Schaltzeit Sonntag Zirku</description>
+      <device ID="2053"/>
+    </command>
+    <!-- Gerätedaten -->
+    <command name="getDevType" protocmd="getaddr">
+      <addr>00F8</addr>
+      <len>8</len>
+      <unit>DT</unit>
+      <description>Ermittle Device Typ der Anlage / SystemIdent_SX</description>
+    </command>
+    <command name="getCtrlId" protocmd="getaddr">
+      <addr>00F9</addr>
+      <len>7</len>
+      <unit>DT</unit>
+      <description>Reglerkennung</description>
+    </command>
+    <command name="getInventory" protocmd="getaddr">
+      <addr>08E0</addr>
+      <len>7</len>
+      <unit>SN</unit>
+      <description>Sachnummer</description>
+    </command>
+    <command name="getInvCodePlug" protocmd="getaddr">
+      <addr>1010</addr>
+      <len>7</len>
+      <unit>SN</unit>
+      <description>Sachnummer Codierstecker</description>
+    </command>
+    <command name="getPanelSWIndex" protocmd="getaddr">
+      <addr>7330</addr>
+      <len>8</len>
+      <unit>DT</unit>
+      <description>Bedienteil SW Index</description>
+    </command>
+    <command name="getKsCardType" protocmd="getaddr">
+      <addr>7656</addr>
+      <len>4</len>
+      <unit>DT</unit>
+      <description>KS Karte Typ
+      </description>
+    </command>
+    <!-- Befehl eingefuegt von ceteris paribus 27.10.2011 -->
+    <command name="getAnlagenschema" protocmd="getaddr">
+      <addr>7700</addr>
+      <len>2</len>
+      <unit>ST</unit>
+      <description>Ermittle das Anlagenschema</description>
+      <!-- K00_KonfiAnlagenschemaGWG_W (00) Heizkreis-Warmwasserschema Adresse 
+				7700 1 A1 | 1 2 A1 + WW | 2 3 M2 | 3 4 M2 + WW | 4 5 A1 + M2 | 5 6 A1 + M2 
+				+ WW | 6 -->
+    </command>
+    <command name="init" protocmd="getaddr">
+      <description>Inintialisierung</description>
+      <device ID="2053" protocmd="init">
+        <addr>dummy</addr>
+      </device>
+    </command>
+    <command name="get" protocmd="gettestaddr">
+      <description>Testabfrage, Adresse eingeben</description>
+      <!-- device 20CB eingefuegt von ceteris paribus 2010 -->
+      <device ID="20CB">
+        <addr>dummy</addr>
+        <len>2</len>
+      </device>
+      <device ID="2053">
+        <addr>dummy</addr>
+        <len>1</len>
+      </device>
+      <device ID="2094">
+        <addr>dummy</addr>
+        <len>2</len>
+      </device>
+    </command>
+    <command name="vget" protocmd="getvtestaddr">
+      <description>Testabfrage, Virtuelle Adresse eingeben</description>
+      <device ID="2053">
+        <addr>dummy</addr>
+        <len>1</len>
+      </device>
+    </command>
+    <command name="bget" protocmd="getbtestaddr">
+      <description>Testabfrage, Bedienteil Adresse eingeben</description>
+      <device ID="2053">
+        <addr>dummy</addr>
+        <len>1</len>
+      </device>
+    </command>
+    <command name="pget" protocmd="getptestaddr">
+      <description>Testabfrage, Port Adresse eingeben</description>
+      <device ID="2053">
+        <addr>dummy</addr>
+        <len>1</len>
+      </device>
+    </command>
+    <command name="eget" protocmd="getetestaddr">
+      <description>Testabfrage, EEProm Adresse eingeben</description>
+      <device ID="2053">
+        <addr>dummy</addr>
+        <len>1</len>
+      </device>
+    </command>
+    <command name="xget" protocmd="getxtestaddr">
+      <description>Testabfrage, XRAM Adresse eingeben</description>
+      <device ID="2053">
+        <addr>dummy</addr>
+        <len>1</len>
+      </device>
+    </command>
+    <command name="kmget" protocmd="getkmtestaddr">
+      <description>Testabfrage, KM-Bus EEProm Adresse eingeben
+      </description>
+      <device ID="2053">
+        <addr>dummy</addr>
+        <len>1</len>
+      </device>
+    </command>
+    <command name="getExtBA" protocmd="getxaddr">
+      <description>Ermittle Zustand der externen Betriebsartenumschaltung
+      </description>
+      <device ID="2053">
+        <addr>00</addr>
+        <len>1</len>
+        <bit>0</bit>
+        <unit>BST</unit>
+      </device>
+    </command>
+    <command name="getPumpeSollM1" protocmd="getaddr">
+      <description>Ermittle Solldrehzahl Pumpe M1</description>
+      <device ID="2053">
+        <addr>B0</addr>
+        <len>1</len>
+        <unit>PR1</unit>
+      </device>
+    </command>
+    <command name="getVentilStatus" protocmd="getpaddr">
+      <description>Ermittle Zustand Umschaltventil WW/Heizen</description>
+      <device ID="2053">
+        <addr>01</addr>
+        <len>1</len>
+        <bit>1</bit>
+        <unit>BST</unit>
+      </device>
+    </command>
+    <!-- Befehl 'getVentilStatus' sprechend analog Viessmann geaendert und 
+			ergaenzt von ceteris paribus 2010 -->
+    <command name="getUmschaltventil" protocmd="getaddr">
+      <addr>0A10</addr>
+      <len>1</len>
+      <unit>USV</unit>
+      <description>Ermittle den Status des Umschaltventils WW/Heizen
+      </description>
+      <device ID="2098"/>
+      <device ID="2053">
+        <addr>01</addr>
+        <len>1</len>
+        <bit>1</bit>
+        <unit>BST</unit>
+      </device>
+    </command>
+    <!-- Befehl 'setVentilStatus' sprechend analog Viessmann geaendert und 
+			ergaenzt von ceteris paribus 2012 -->
+    <command name="setUmschaltventil" protocmd="setaddr">
+      <addr>0A10</addr>
+      <len>1</len>
+      <unit>USV</unit>
+      <description>Setze den Status des Umschaltventils WW/Heizen
+      </description>
+      <device ID="2098"/>
+      <device ID="2053">
+        <addr>01</addr>
+        <len>1</len>
+        <bit>1</bit>
+        <unit>BST</unit>
+      </device>
+    </command>
+    <command name="getTempRueck" protocmd="getaddr">
+      <description>Ermittle die Rueckauftemepratur</description>
+      <device ID="2053">
+        <addr>44</addr>
+        <len>1</len>
+        <bit>5</bit>
+        <unit>UT1</unit>
+      </device>
+    </command>
+    <!-- S53ZO -->
+    <!-- Device identification -->
+    <command name="getGeraetekennung" protocmd="getaddr">
+        <addr>00f8</addr>
+        <len>2</len>
+        <unit>CS</unit>
+        <description>Geraetekennung</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Operation modes -->
+    <command name="getBetriebsmodus" protocmd="getaddr">
+        <addr>b000</addr>
+        <len>1</len>
+        <unit>BA</unit>
+        <description>Betriebsmodus</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getManuellerModus" protocmd="getaddr">
+        <addr>b020</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Manueller Modus</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Enables -->
+    <command name="getFreigabeWasserElektro" protocmd="getaddr">
+        <addr>6015</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Freigabe Wasser Elektro</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getFreigabeHeizenElektro" protocmd="getaddr">
+        <addr>7902</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Freigabe Heizen Elektro</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getFreigabeDurchlauferh" protocmd="getaddr">
+        <addr>7900</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Freigabe Durchlauferhitzer</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getFreigabeKuehlung" protocmd="getaddr">
+        <addr>71fe</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Freigabe Kuehlung</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Status indicators -->
+    <command name="getStatusVerdichter" protocmd="getaddr">
+        <addr>0400</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Verdichter</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusVentilatorstufe1" protocmd="getaddr">
+        <addr>0402</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Ventilatorstufe 1</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusVentilatorstufe2" protocmd="getaddr">
+        <addr>0404</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Ventilatorstufe 2</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusDurchlauferhStufe1" protocmd="getaddr">
+        <addr>0408</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Durchlauferhitzer Stufe 1</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusDurchlauferhStufe2" protocmd="getaddr">
+        <addr>0409</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Durchlauferhitzer Stufe 2</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusHKUmkehrCool" protocmd="getaddr">
+        <addr>041c</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status HK UmkehrCool</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusPumpeHeizkreisA1" protocmd="getaddr">
+        <addr>040d</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Pumpe Heizkreis A1</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusZusatzausgangZPumpe" protocmd="getaddr">
+        <addr>0410</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Zusatzausgang ZPumpe</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusUmschaltventilHWW" protocmd="getaddr">
+        <addr>0414</addr>
+        <len>1</len>
+        <unit>USV</unit>
+        <description>Status Umschaltventil H WW</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusSpeicherladepumpe" protocmd="getaddr">
+        <addr>0416</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Speicherladepumpe</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusKaeltekreisumkehr" protocmd="getaddr">
+        <addr>049c</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Kaeltekreisumkehr</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getStatusSammelmeldung" protocmd="getaddr">
+        <addr>0411</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Status Sammelmeldung</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Temperature readings -->
+    <command name="getAussentemperatur" protocmd="getaddr">
+        <addr>0101</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Aussentemperatur</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getRaumtemperaturIst" protocmd="getaddr">
+        <addr>0116</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Raumtemperatur Ist</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getAussentemperaturRegelung" protocmd="getaddr">
+        <addr>0952</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Aussentemperatur Regelung</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBrauchwassertemperaturOben" protocmd="getaddr">
+        <addr>010D</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Brauchwassertemperatur Oben</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getHysterreseWWWP" protocmd="getaddr">
+        <addr>6007</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Hysterrese WW WP</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getHysterreseWWElektro" protocmd="getaddr">
+        <addr>6008</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Hysterrese WW Elektro</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Temperature setpoints -->
+    <command name="getBrauchwassertemperaturSoll" protocmd="getaddr">
+        <addr>6000</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Brauchwassertemperatur Soll</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBrauchwassertemperatur2Soll" protocmd="getaddr">
+        <addr>600C</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Brauchwassertemperatur 2 Soll</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getRaumtemperaturSoll" protocmd="getaddr">
+        <addr>2000</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Raumtemperatur Soll</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getRedRaumtemperaturSoll" protocmd="getaddr">
+        <addr>2001</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Reduzierte Raumtemperatur Soll</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getPartyRaumtemperaturSoll" protocmd="getaddr">
+        <addr>2022</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Party Raumtemperatur Soll</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Heating parameters -->
+    <command name="getHeizkennlinieNiveau" protocmd="getaddr">
+        <addr>2006</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Heizkennlinie Niveau</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getHeizkennlinieSteigung" protocmd="getaddr">
+        <addr>2007</addr>
+        <len>2</len>
+        <unit>UN</unit>
+        <description>Heizkennlinie Steigung</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getRaumtemperaturaufschaltung" protocmd="getaddr">
+        <addr>200a</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>Raumtemperaturaufschaltung</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Cooling parameters -->
+    <command name="getKuehlkennlinieNiveau" protocmd="getaddr">
+        <addr>7110</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Kuehlkennlinie Niveau</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getKuehlkennlinieSteigung" protocmd="getaddr">
+        <addr>7111</addr>
+        <len>2</len>
+        <unit>UN</unit>
+        <description>Kuehlkennlinie Steigung</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getMinVLTempKuehlung" protocmd="getaddr">
+        <addr>7103</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Min VL Temp Kuehlung</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinfTempAufschaltungKuehl" protocmd="getaddr">
+        <addr>7104</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Einfluss Temp Aufschaltung Kuehl</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Temperature differences -->
+    <command name="getTemperaturDifferenzHeizung" protocmd="getaddr">
+        <addr>7003</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Temperaturdifferenz Heizung</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getTemperaturDifferenzKuehlung" protocmd="getaddr">
+        <addr>7004</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Temperaturdifferenz Kuehlung</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- System temperatures -->
+    <command name="getTemperaturVerdampfer" protocmd="getaddr">
+        <addr>0102</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Temperatur Verdampfer</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getPrimaerkreisVLtempLuft" protocmd="getaddr">
+        <addr>0103</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Primaerkreis VL Temp Luft</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getPrimaerkreisRLtempLuft" protocmd="getaddr">
+        <addr>0104</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Primaerkreis RL Temp Luft</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getPrimaerkreisVLtempWasser" protocmd="getaddr">
+        <addr>0105</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Primaerkreis VL Temp Wasser</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getPrimaerkreisRLtempWasser" protocmd="getaddr">
+        <addr>0106</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Primaerkreis RL Temp Wasser</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Pressure readings -->
+    <command name="getDruckVerdampfer" protocmd="getaddr">
+        <addr>0680</addr>
+        <len>2</len>
+        <unit>PR</unit>
+        <description>Druck im Verdampfer</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getDruckKondensator" protocmd="getaddr">
+        <addr>0682</addr>
+        <len>2</len>
+        <unit>PR</unit>
+        <description>Druck im Kondensator</description>
+        <device ID="2053"/>
+    </command>
+<command name="getBelastung2232K" protocmd="getaddr">
+        <addr>1622</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Belastung 22-32K</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBelastung3241K" protocmd="getaddr">
+        <addr>1624</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Belastung 32-41K</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBelastung4250K" protocmd="getaddr">
+        <addr>1626</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Belastung 42-50K</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBelastung5199K" protocmd="getaddr">
+        <addr>1628</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Belastung 51-99K</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Operating hours -->
+    <command name="getBetriebsstdVerdichter" protocmd="getaddr">
+        <addr>0580</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Verdichter</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdVentilatorstufe1" protocmd="getaddr">
+        <addr>0582</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Ventilatorstufe 1</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdVentilatorstufe2" protocmd="getaddr">
+        <addr>0584</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Ventilatorstufe 2</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdDurchlauferh1" protocmd="getaddr">
+        <addr>0588</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Durchlauferhitzer 1</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdDurchlauferh2" protocmd="getaddr">
+        <addr>0589</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Durchlauferhitzer 2</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdHeizkreisA1" protocmd="getaddr">
+        <addr>058D</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Heizkreis A1</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdZPumpe" protocmd="getaddr">
+        <addr>058e</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Z-Pumpe</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdSammelmeldung" protocmd="getaddr">
+        <addr>058f</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Sammelmeldung</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdVentilWW" protocmd="getaddr">
+        <addr>0594</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Ventil WW</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdSpeicherpumpe" protocmd="getaddr">
+        <addr>0596</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Speicherpumpe</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getBetriebsstdActiveCooling" protocmd="getaddr">
+        <addr>059C</addr>
+        <len>4</len>
+        <unit>CS</unit>
+        <description>Betriebsstunden Active Cooling</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Counters -->
+    <command name="getEinschaltVerdichter" protocmd="getaddr">
+        <addr>0500</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Verdichter</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinschaltPrimaerquelle" protocmd="getaddr">
+        <addr>0502</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Primaerquelle</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinschaltSekundaerquelle" protocmd="getaddr">
+        <addr>0504</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Sekundaerquelle</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getVerdichterUmkehrungen" protocmd="getaddr">
+        <addr>051c</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Verdichter Umkehrungen</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getHysterreseVerdichter" protocmd="getaddr">
+        <addr>7304</addr>
+        <len>4</len>
+        <unit>UT</unit>
+        <description>Hysterrese Verdichter</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinschaltDurchlauferh1" protocmd="getaddr">
+        <addr>0508</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Durchlauferhitzer 1</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinschaltDurchlauferh2" protocmd="getaddr">
+        <addr>0509</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Durchlauferhitzer 2</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinschaltHeizkreisA1" protocmd="getaddr">
+        <addr>050d</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Heizkreis A1</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinschaltZPumpe" protocmd="getaddr">
+        <addr>0510</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Z-Pumpe</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinschaltSammelmeldung" protocmd="getaddr">
+        <addr>0511</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Sammelmeldung</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinschaltVentilWW" protocmd="getaddr">
+        <addr>0514</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Ventil WW</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEinschaltSpeicherpumpe" protocmd="getaddr">
+        <addr>0516</addr>
+        <len>4</len>
+        <unit>CO</unit>
+        <description>Einschaltungen Speicherpumpe</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Performance measurements -->
+    <command name="getJAZGesamt" protocmd="getaddr">
+        <addr>1680</addr>
+        <len>2</len>
+        <unit>UTH</unit>
+        <description>JAZ Gesamt</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getJAZHeizen" protocmd="getaddr">
+        <addr>1681</addr>
+        <len>2</len>
+        <unit>UTH</unit>
+        <description>JAZ Heizen</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getJAZWW" protocmd="getaddr">
+        <addr>1682</addr>
+        <len>2</len>
+        <unit>UTH</unit>
+        <description>JAZ Warmwasser</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getCOPWW" protocmd="getaddr">
+        <addr>1691</addr>
+        <len>2</len>
+        <unit>UTH</unit>
+        <description>COP Warmwasser</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getCOPHeizen" protocmd="getaddr">
+        <addr>1690</addr>
+        <len>2</len>
+        <unit>UTH</unit>
+        <description>COP Heizen</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Energy measurements -->
+    <command name="getElektroEnergieWW12M" protocmd="getaddr">
+        <addr>1670</addr>
+        <len>4</len>
+        <unit>COL</unit>
+        <description>Elektroenergie WW 12M</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getElektroEnergieHeizen12M" protocmd="getaddr">
+        <addr>1660</addr>
+        <len>4</len>
+        <unit>COL</unit>
+        <description>Elektroenergie Heizen 12M</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getWaermeEnergieWW12M" protocmd="getaddr">
+        <addr>1650</addr>
+        <len>4</len>
+        <unit>COL</unit>
+        <description>Waermeenergie WW 12M</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getWaermeEnergieHeizen12M" protocmd="getaddr">
+        <addr>1640</addr>
+        <len>4</len>
+        <unit>COL</unit>
+        <description>Waermeenergie Heizen 12M</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getElektroEnergieWW1W" protocmd="getaddr">
+        <addr>16D0</addr>
+        <len>2</len>
+        <unit>CS</unit>
+        <description>Elektroenergie WW 1W</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getElektroEnergieHeizen1W" protocmd="getaddr">
+        <addr>16D1</addr>
+        <len>2</len>
+        <unit>CS</unit>
+        <description>Elektroenergie Heizen 1W</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getWaermeEnergieWW1W" protocmd="getaddr">
+        <addr>16D2</addr>
+        <len>2</len>
+        <unit>CS</unit>
+        <description>Waermeenergie WW 1W</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getWaermeEnergieHeizen1W" protocmd="getaddr">
+        <addr>16D3</addr>
+        <len>2</len>
+        <unit>CS</unit>
+        <description>Waermeenergie Heizen 1W</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Performance values -->
+    <command name="getHeizleistung" protocmd="getaddr">
+        <addr>16a0</addr>
+        <len>4</len>
+        <unit>VS</unit>
+        <description>Heizleistung</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getLeistungsaufnahme" protocmd="getaddr">
+        <addr>16a4</addr>
+        <len>4</len>
+        <unit>VS</unit>
+        <description>Leistungsaufnahme</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Additional temperature readings -->
+    <command name="getMittlEingangstempLuft" protocmd="getaddr">
+        <addr>16b0</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Mittlere Eingangstemperatur Luft</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getMittlAusgangstempLuft" protocmd="getaddr">
+        <addr>16b1</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Mittlere Ausgangstemperatur Luft</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- External control signals -->
+    <command name="getOnOff" protocmd="getaddr">
+        <addr>0012</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>On/Off ESPEasy</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getEVU" protocmd="getaddr">
+        <addr>0004</addr>
+        <len>1</len>
+        <unit>ST</unit>
+        <description>EVU Sperre ESPEasy</description>
+        <device ID="2053"/>
+    </command>
+
+    <!-- Additional temperature sensors -->
+    <command name="getAussentemperatur1" protocmd="getaddr">
+        <addr>0800</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Aussentemperatur 1</description>
+        <device ID="2053"/>
+    </command>
+    
+    <command name="getAussentemperatur2" protocmd="getaddr">
+        <addr>0801</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Aussentemperatur 2</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getAussentemperatur3" protocmd="getaddr">
+        <addr>0805</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Aussentemperatur 3</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getAussentemperatur4" protocmd="getaddr">
+        <addr>081d</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Aussentemperatur 4</description>
+        <device ID="2053"/>
+    </command>
+
+    <command name="getAussentemperatur5" protocmd="getaddr">
+        <addr>081e</addr>
+        <len>2</len>
+        <unit>UT</unit>
+        <description>Aussentemperatur 5</description>
+        <device ID="2053"/>
+    </command>   
+</commands>
+</vito>
