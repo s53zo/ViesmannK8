@@ -1,8 +1,3 @@
-To start:
-
-vcontrold -x vcontrold.xml -d /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
-
-python3 vito_mqtt.py &
 
 # Viessmann Heat Pump MQTT Bridge
 
@@ -103,3 +98,32 @@ Feel free to submit issues and pull requests.
 
 - Based on the vclient interface for Viessmann heat pumps
 - Uses the paho-mqtt library for MQTT communication
+
+## To start
+
+You can start if from shell:
+
+```bash
+vcontrold -x vcontrold.xml -d /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
+
+python3 vito_mqtt.py &
+```
+
+or use service files:
+/etc/systemd/system/vcontrold.service
+/etc/systemd/system/vito_mqtt.service
+
+and then execute
+
+```bash
+sudo systemctl daemon-reload
+
+sudo systemctl enable vcontrold.service
+sudo systemctl enable vito_mqtt.service
+
+sudo systemctl start vcontrold.service
+sudo systemctl start vito_mqtt.service
+```
+
+
+
