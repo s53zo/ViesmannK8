@@ -38,7 +38,7 @@ PLAUSIBLE_COMMANDS = {
     "getStatusVentilatorstufe1": "ABC",
     "getStatusVentilatorstufe2": "ABC",
     "getRaumtemperaturIst": "ABC",
-    "getRaum2": "ABC"
+    "getRaum2": "Room temperature setting"
 }
 
 SUSPICIOUS_COMMANDS = {
