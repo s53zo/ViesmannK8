@@ -1,0 +1,12 @@
+[Unit]
+Description=Vcontrold Service
+After=network.target
+
+[Service]
+# Use the full path to vcontrold (usually /usr/bin/vcontrold)
+ExecStart=/usr/bin/vcontrold -x /full/path/to/vcontrold.xml -d /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
+Restart=on-failure
+# Optionally specify a User= if you do not wish to run as root
+
+[Install]
+WantedBy=multi-user.target
