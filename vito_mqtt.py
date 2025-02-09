@@ -111,8 +111,8 @@ SETTABLE_PARAMETERS = {
 EXPECTED_OUTPUT_TYPE = {
     "getWWBereitung": "enum",
     "getBetriebArtHK1": "enum",
-    "getBetriebsmodus"; "enum",
-    "getManuellerModus" "enum"
+    "getBetriebsmodus": "enum",
+    "getManuellerModus": "enum"
 }
 
 def on_connect(client, userdata, flags, rc):
