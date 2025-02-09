@@ -115,6 +115,12 @@ or use service files:
 
 /etc/systemd/system/vito_mqtt.service
 
+where you can do
+
+```bash
+ln -s /home/s53zo/ViesmannK8/vcontrold.service /etc/systemd/system/vcontrold.service
+ln -s /home/s53zo/ViesmannK8/vito_mqtt.service /etc/systemd/system/vito_mqtt.service
+```
 
 and then execute
 
