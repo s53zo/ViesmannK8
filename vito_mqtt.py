@@ -47,8 +47,6 @@ SUSPICIOUS_COMMANDS = {
     "getSpeichervorrangM2": "Priority storage for heating circuit M2",
     "getSpeichervorrangM3": "Priority storage for heating circuit M3",
     "getDevType": "Device type/System identification",
-    "getCtrlId": "Controller identification",
-    "getPanelSWIndex": "Control panel software index",
     "getKsCardType": "KS card type",
     "getUmschaltventil": "DHW/Heating diverter valve status"
 }
