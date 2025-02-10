@@ -8,7 +8,7 @@ import re
 
 # Configure logging
 logging.basicConfig(level=logging.INFO,
-                   format='%(asctime)s - %(levelname)s - %(message)s')
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # MQTT Configuration
@@ -47,8 +47,6 @@ SUSPICIOUS_COMMANDS = {
     "getSpeichervorrangM2": "Priority storage for heating circuit M2",
     "getSpeichervorrangM3": "Priority storage for heating circuit M3",
     "getDevType": "Device type/System identification",
-    "getCtrlId": "Controller identification",
-    "getPanelSWIndex": "Control panel software index",
     "getKsCardType": "KS card type",
     "getUmschaltventil": "DHW/Heating diverter valve status"
 }
@@ -87,7 +85,6 @@ ADDITIONAL_COMMANDS = {
     "getJAZgesamt": "Seasonal performance factor (overall)"
 }
 
-
 # Define settable parameters with their valid ranges and accepted values
 SETTABLE_PARAMETERS = {
     "setTempWWsoll": {
@@ -109,6 +106,15 @@ SETTABLE_PARAMETERS = {
     }
 }
 
+# Define expected output types for specific commands.
+# Default expected type is "numeric". For commands that return enumerated values, set "enum".
+EXPECTED_OUTPUT_TYPE = {
+    "getWWBereitung": "enum",
+    "getBetriebArtHK1": "enum",
+    "getBetriebsmodus": "enum",
+    "getManuellerModus": "enum"
+}
+
 def on_connect(client, userdata, flags, rc):
     """Callback for when the client connects to the MQTT broker."""
     if rc == 0:
@@ -120,7 +126,7 @@ def on_connect(client, userdata, flags, rc):
         logger.error(f"Failed to connect to MQTT broker with code: {rc}")
 
 def on_message(client, userdata, msg):
-    """Callback for when a MQTT message is received."""
+    """Callback for when an MQTT message is received."""
     try:
         # Extract command from topic (e.g., "vito/set/setTempWWsoll" -> "setTempWWsoll")
         command = msg.topic.split('/')[-1]
@@ -164,7 +170,6 @@ def on_message(client, userdata, msg):
         result = execute_vclient_command(cmd_string)
         if result is not None:
             logger.info(f"Successfully set {command} to {value}")
-            
             # Publish confirmation
             publish_command_value(client, command, param_config['description'], value)
         else:
@@ -172,6 +177,52 @@ def on_message(client, userdata, msg):
 
     except Exception as e:
         logger.error(f"Error processing message: {str(e)}")
+
+def parse_vclient_output(stdout, command):
+    """
+    Parse the output from vclient based on the expected type.
+    For numeric commands, return a formatted float; for enumerated commands, return the string.
+    """
+    stdout = stdout.strip()
+    if ':' in stdout:
+        # Split on the first colon
+        _, raw_value = stdout.split(':', 1)
+        raw_value = raw_value.strip()
+    else:
+        raw_value = stdout
+
+    expected_type = EXPECTED_OUTPUT_TYPE.get(command, "numeric")
+    if expected_type == "numeric":
+        try:
+            numeric_value = float(raw_value)
+            return f"{numeric_value:.1f}"
+        except ValueError:
+            logger.debug(f"Expected numeric value but got '{raw_value}' for command {command}")
+            return raw_value
+    else:  # For enumerated values, simply return the string.
+        return raw_value
+
+def execute_vclient_command(command):
+    """Execute vclient command and return the parsed result."""
+    try:
+        vclient_args = ['vclient', '-h', '127.0.0.1', '-p', '3002', command]
+        result = subprocess.run(vclient_args, capture_output=True, text=True, timeout=10)
+        
+        if result.returncode == 0:
+            # Pass only the command name (first word) to the parser.
+            value = parse_vclient_output(result.stdout, command.split()[0])
+            if value:
+                return value
+        
+        logger.warning(f"Command {command} failed with output: {result.stdout}")
+        return None
+
+    except subprocess.TimeoutExpired:
+        logger.error(f"Command {command} timed out")
+        return None
+    except Exception as e:
+        logger.error(f"Error executing command {command}: {str(e)}")
+        return None
 
 def clean_numeric_value(value_str):
     """Clean and format numeric value from vclient output."""
@@ -181,35 +232,6 @@ def clean_numeric_value(value_str):
             return f"{float(numeric_match.group()):.1f}"
         return None
     except (ValueError, TypeError):
-        return None
-
-def execute_vclient_command(command):
-    """Execute vclient command and return the result."""
-    try:
-        # Construct the command
-        vclient_args = ['vclient', '-h', '127.0.0.1', '-p', '3002', command]
-        
-        result = subprocess.run(vclient_args, capture_output=True, text=True, timeout=10)
-        
-        if result.returncode == 0:
-            # For get commands (containing no space), extract the value
-            if ' ' not in command:
-                output_parts = result.stdout.strip().split(':')
-                if len(output_parts) >= 2:
-                    value = clean_numeric_value(output_parts[1].strip())
-                    if value is not None:
-                        return value
-            # For set commands, return success
-            else:
-                return "OK"
-                
-        logger.warning(f"Command {command} failed with output: {result.stdout}")
-        return None
-    except subprocess.TimeoutExpired:
-        logger.error(f"Command {command} timed out")
-        return None
-    except Exception as e:
-        logger.error(f"Error executing command {command}: {str(e)}")
         return None
 
 def publish_command_value(client, command, description, value):
