@@ -5,7 +5,9 @@ After=network.target
 [Service]
 # Use the full path to python3 and your script
 ExecStart=/usr/bin/python3 /home/s53zo/ViesmannK8/vito_mqtt.py
-Restart=on-failure
+Restart=always
+RestartSec=5  # Optional: wait 5 seconds before restarting
+
 # If your script needs to run from a specific directory, uncomment and set the following:
 # WorkingDirectory=/full/path/to/your/script/directory
 # Optionally, run as a specific user:
