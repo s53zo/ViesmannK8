@@ -6,8 +6,8 @@ After=network.target
 # Use the full path to vcontrold (usually /usr/bin/vcontrold)
 Type=forking
 ExecStart=/usr/sbin/vcontrold -x /home/s53zo/ViesmannK8/vcontrold.xml -d /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
-Restart=on-failure
-# Optionally specify a User= if you do not wish to run as root
+Restart=always
+RestartSec=5  # Optional: wait 5 seconds before restarting
 
 [Install]
 WantedBy=multi-user.target
