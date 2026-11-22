@@ -85,7 +85,10 @@ class Spool:
         path = Path(path)
         path.parent.mkdir(parents=True,exist_ok=True)
         self.db = sqlite3.connect(path)
-        self.db.execute('PRAGMA journal_mode=DELETE')
+        # This single writer runs on an NFS-root Pi. Reuse the rollback journal
+        # and keep its lock to avoid file creation/unlink for every sample.
+        self.db.execute('PRAGMA locking_mode=EXCLUSIVE')
+        self.db.execute('PRAGMA journal_mode=PERSIST')
         self.db.execute('PRAGMA synchronous=FULL')
         self.db.executescript('''
             CREATE TABLE IF NOT EXISTS pending (

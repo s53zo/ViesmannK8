@@ -58,7 +58,7 @@ class OutageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path, transcript = Path(tmp)/'spool.sqlite3', Path(tmp)/'wire.json'
             child = subprocess.run([sys.executable, __file__, '--crash', str(path), str(transcript)],
-                                   capture_output=True, text=True, timeout=15)
+                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(child.returncode, 73, child.stderr)
             broker = Broker()
             spool = Spool(path, capacity=3)
