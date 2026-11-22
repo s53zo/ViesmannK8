@@ -1,0 +1,263 @@
+command,address,length_bytes,legacy_unit,xml_profiles,resolution,effective_register,xml_description
+getBetriebsmodus,B000,1,BA,,effective definition,B000-1,"Betriebsmodus (0=aus, 1=ww, 2=ww+heizen/kühlen, 66=party)"
+getManuellerModus,B020,1,BA,,effective definition,B020-1,"Manueller Modus (0=aus, 1=Heizen, 2=1xWWBereitung auf Temp2)"
+getKompressorBelastung1,1620,2,CS,,effective definition,1620-2,Stunden Kompressor Belastungsklasse 0-22K
+getKompressorBelastung2,1622,2,CS,,effective definition,1622-2,Stunden Kompressor Belastungsklasse 22-32K
+getKompressorBelastung3,1624,2,CS,,effective definition,1624-2,Stunden Kompressor Belastungsklasse 32-41K
+getKompressorBelastung4,1626,2,CS,,effective definition,1626-2,Stunden Kompressor Belastungsklasse 42-50K
+getKompressorBelastung5,1628,2,CS,,effective definition,1628-2,Stunden Kompressor Belastungsklasse 51-99K
+getEnergieElektroWW12M,1670,4,CS,,effective definition,1670-4,ElektroEnergie Warmwasser 12 Monate
+getEnergieWaermeWW12M,1660,4,CS,,effective definition,1660-4,WaermeEnergie Warmwasser 12 Monate
+getEnergieElektroHeizen12M,1650,4,CS,,effective definition,1650-4,ElektroEnergie Heizen 12 Monate
+getEnergieWaermeHeizen12M,1640,4,CS,,effective definition,1640-4,WaermeEnergie Heizen 12 Monate
+getEnergieElektroWW1W,16D0,2,CS,,effective definition,16D0-2,ElektroEnergie Warmwasser 1 Woche
+getEnergieWaermeWW1W,16D2,2,CS,,effective definition,16D2-2,WaermeEnergie Warmwasser 1 Woche
+getEnergieElektroHeizen1W,16D1,2,CS,,effective definition,16D1-2,ElektroEnergie Heizen 1 Woche
+getEnergieWaermeHeizen1W,16D3,2,CS,,effective definition,16D3-2,WaermeEnergie Heizen 1 Woche
+getHysterese,7304,4,UT,,effective definition,7304-4,Hysterese Einschaltung Heizkreis (0.5 bis 3)
+getKuehlkennlinieNiveau,7110,4,UT,,effective definition,7110-4,Kühlkennlinie Niveau
+getKuehlkennlinieSteigung,7111,4,UT,,effective definition,7111-4,Kühlkennlinie Steigung
+getMinVLTempKuehlung,7103,4,UT,,effective definition,7103-4,Minimale Vorlauftemperatur Kühlung
+getTempDiffKuehlung,7004,4,UT,,effective definition,7004-4,Temperaturdifferenz Kühlung
+getFreigabeKuehlung,71FE,1,ST,,effective definition,71FE-1,Freigabe Kühlung
+getTempDiffHeizung,7003,4,UT,,effective definition,7003-4,Temperaturdifferenz Heizung
+getHeizleistung,16A0,4,PR,,effective definition,16A0-4,Heizleistung
+getLeistungsaufnahme,16A4,4,PR,,effective definition,16A4-4,Leistungsaufnahme
+getEingangstemperaturLuft,16B0,2,UT,,effective definition,16B0-2,Mittlere Eingangstemperatur Luft
+getAusgangstemperaturLuft,16B1,2,UT,,effective definition,16B1-2,Mittlere Ausgangstemperatur Luft
+getCOPWW,1691,2,PR,,effective definition,1691-2,COP Warmwasser
+getCOPHeizen,1690,2,PR,,effective definition,1690-2,COP Heizen
+getDruckVerdampfer,0680,2,PR,,effective definition,0680-2,Druck im Verdampfer
+getDruckKondensator,0682,2,PR,,effective definition,0682-2,Druck im Kondensator
+getFreigabeElektroWW,6015,1,ST,,effective definition,6015-1,Freigabe Elektroheizung für WW-Bereitung
+getFreigabeHeizElektro,7902,1,ST,,effective definition,7902-1,Heizen mit Elektro
+getFreigabeDurchlauferh,7900,1,ST,,effective definition,7900-1,Freigabe Heizwasser-Durchlauferhitzer
+getStatusVentilatorstufe1,0402,1,ST,,effective definition,0402-1,Status Ventilatorstufe 1
+getStatusVentilatorstufe2,0404,1,ST,,effective definition,0404-1,Status Ventilatorstufe 2
+getStatusKaeltekreisumkehr,049C,1,ST,,effective definition,049C-1,Status Kältekreisumkehr
+getAussentemperaturRegelung,0952,2,UT,,effective definition,0952-2,Aussentemperatur für Regelung
+getAussentemperatur1,0800,2,UT,,effective definition,0800-2,Aussentemperatur 1
+getAussentemperatur2,0801,2,UT,,effective definition,0801-2,Aussentemperatur 2
+getAussentemperatur3,0805,2,UT,,effective definition,0805-2,Aussentemperatur 3
+getAussentemperatur4,081D,2,UT,,effective definition,081D-2,Aussentemperatur 4
+getAussentemperatur5,081E,2,UT,,effective definition,081E-2,Aussentemperatur 5
+getRaumtemperaturIST,0116,2,UT,,effective definition,0116-2,Raumtemperatur ist Vitotrol HK1
+getRaumtemperaturParty,2022,2,UT,,effective definition,2022-2,Raumtemperatur im Partybetrieb HeizkreisA1/HK1
+getJAZgesamt,1680,2,PR,,effective definition,1680-2,Jahresarbeitszahl Gesamt
+getJAZHeizen,1681,2,PR,,effective definition,1681-2,Jahresarbeitszahl Heizen
+getJAZWW,1682,2,PR,,effective definition,1682-2,Jahresarbeitszahl Warmwasser
+getStatusQuellePri1,0482,1,RT,,effective definition,0482-1,Ermittle Schaltungen Sekundärquelle
+getAnzQuelleSek,0504,4,CO,,effective definition,0504-4,Ermittle Schaltungen Sekundärquelle
+getAnzHeizstabSt1,0508,4,CO,,effective definition,0508-4,Ermittle Schaltungen Heizstab Stufe 1
+getAnzHeizstabSt2,0509,4,CO,,effective definition,0509-4,Ermittle Schaltungen Heizstab Stufe 2
+getAnzHK,050D,4,CO,,effective definition,050D-4,Ermittle Schaltungen Heizkreis
+getStatusZirkPumpe,0490,1,BST,,effective definition,0490-1,Status Zirkulationspumpe
+getStatusVerdichter,0480,1,BST,,effective definition,0480-1,Status Verdichter
+getStatusVentilWW,0494,1,RT,,effective definition,0494-1,Status 3W Ventil
+getEHeizungStufe1BS,0588,4,CS,,effective definition,0588-4,Ermittle die Betriebsstunden der E-Heizung Stufe 1
+getEHeizungStufe2BS,0589,4,CS,,effective definition,0589-4,Ermittle die Betriebsstunden der E-Heizung Stufe 2
+getHK1PumpeBS,058D,4,CS,,effective definition,058D-4,Ermittle die Betriebsstunden der HK1 Pumpe
+getVerdichter1BS,05A8,4,CS,,effective definition,05A8-4,Ermittle die Betriebsstunden von Verdichter 1
+getVerdichter2BS,05A9,4,CS,,effective definition,05A9-4,Ermittle die Betriebsstunden von Verdichter 2
+getVorlaufTemp1,010A,2,UT,,effective definition,010A-2,Vorlauftemperatur Primärquelle
+getRuecklaufTemp1,01C4,2,UT,,effective definition,01C4-2,Rücklauftemperatur Primärquelle
+getEEV1,0529,4,CO,,effective definition,0529-4,Ermittle Schaltungen Verdichter
+getTempA,0101,2,UT,,effective definition,0101-2,Ermittle die Aussentemperatur in Grad C
+getTempWWObenIst,010D,2,UT,,effective definition,010D-2,Ermittle die Warmwassertemperatur Oben in Grad C
+getTempWWUntenIst,010E,2,UT,,effective definition,010E-2,Ermittle die Warmwassertemperatur Unten in Grad C
+getTempWWsoll,6000,2,UT,,effective definition,6000-2,Ermittle die Warmwassersolltemperatur in Grad C
+getWWBereitung,B020,1,WW,,effective definition,B020-1,Ermittle einmalige Warmwasser Aufbereitung Temp2
+getTempStp2,0814,2,UT,,effective definition,0814-2,Ermittle die WW Auslauftemperatur in Grad C (Tiefpass)
+getWWUWPNachlauf,6762,2,CO,,effective definition,6762-2,Ermittle Warmwasserpumpennachlauf
+getSpeichervorrang,27A2,1,ST,,effective definition,27A2-1,Ermittle den Status Speichervorrang Heizkreis ohne Mischer A1 bzw. mit Mischer M1
+getSpeichervorrangM2,37A2,1,ST,,effective definition,37A2-1,Ermittle den Status Speichervorrang Heizkreis mit Mischer M2
+getSpeichervorrangM3,47A2,1,ST,,effective definition,47A2-1,Ermittle den Status Speichervorrang Heizkreis mit Mischer M3
+getNeigungHK1,2007,2,UN,,effective definition,2007-2,Ermittle Neigung Heizkennlinie HK1
+getNeigungHK2,3007,2,UN,,effective definition,3007-2,Ermittle Neigung Heizkennlinie M2
+getNiveauHK1,2006,2,UN,,effective definition,2006-2,Ermittle Niveau Heizkennlinie HK1
+getNiveauHK2,3006,2,UN,,effective definition,3006-2,Ermittle Niveau Heizkennlinie M2
+getTempVL,0105,2,UT,,effective definition,0105-2,Ermittle die Vorlauftemperatur in Grad C
+getTempRL,0106,2,UT,,effective definition,0106-2,Ermittle die Rücklauftemperatur in Grad C
+getTempVListHK1,0103,2,UT,,effective definition,0103-2,Ermittle die Vorlauftemperatur HK1 in Grad C
+getTempRListHK1,0104,2,UT,,effective definition,0104-2,Ermittle die Rücklauftemperatur HK1 in Grad C
+getTempVListHK2,01D4,2,UT,,effective definition,01D4-2,Ermittle die Vorlauftemperatur HK2 in Grad C
+getTempVLsollHK1,1800,2,UT,,effective definition,1800-2,Ermittle die Vorlaufsolltemperatur HK1 in Grad C
+getTempVLsollM2,1801,2,UT,,effective definition,1801-2,Ermittle die Vorlaufsolltemperatur M2 in Grad C
+getTempRL17A,080A,2,UT,2053 20CB,effective definition,080A-2,Ermittle die Ruecklauftemperatur 17A in Grad C
+getTempSpu,6566,2,UT,2053,effective definition,6566-2,Ermittle die Speichertemperatur unten in Grad C
+getTempStp,0812,2,UT,2053 2098,effective definition,0812-2,Ermittle die Speichertemperatur in Grad C (Tiefpass)
+getTempRaumNorSollM1,2306,1,UTI,2053,effective definition,2306-1,Ermittle die Raumsolltemperatur normal M1 in Grad C
+getTempRaumNorSollM2,3000,1,UTI,2053,effective definition,3000-1,Ermittle die Raumsolltemperatur normal M2 in Grad C
+getTempRaumRedSollM1,2000,1,UTI,,effective definition,2000-1,Ermittle die Raumsolltemperatur reduziert M1 in Grad C
+getTempRaumRedSollM2,3307,1,UTI,,effective definition,3307-1,Ermittle die Raumsolltemperatur reduziert M2 in Grad C
+getPumpeStatusM1,2906,1,RT,2053 20CB,effective definition,2906-1,Ermittle den Status der Pumpe M1
+getPumpeStatusM2,3906,1,RT,2053 20CB,effective definition,3906-1,Ermittle den Status der Pumpe M2
+getPumpeDrehzahlM2,3906,1,RT,2053 20CB,effective definition,3906-1,Ermittle die Drehzahl der Pumpe M2
+getLZSNH,058A,4,CS,,effective definition,058A-4,Ermittle die Betriebsstunden der WP
+getLZAC,058C,4,CS,,effective definition,058C-4,Ermittle die Betriebsstunden der WP
+getLZPumpe,058D,4,CS,,effective definition,058D-4,Ermittle die Betriebsstunden der WP
+getLZWP,5005,4,CS,,effective definition,5005-4,Ermittle die Betriebsstunden der WP
+getPumpeStatusIntern,,,,20CB,unavailable by name,,Ermittle den Status der Internen Pumpe
+getPumpeDrehzahlIntern,3906,1,RT,2053 20CB,effective definition,3906-1,Ermittle die Drehzahl der Internen Pumpe
+getPumpeStatusSp,0845,1,RT,2053 20CB,effective definition,0845-1,Ermittle den Status der Speicherladepumpe
+getPumpeStatusHK1,048D,1,RT,,effective definition,048D-1,Ermittle den Status der Heizkreispumpe HK1
+getPumpeStatusZirku,0846,1,RT,2053 20CB,effective definition,0846-1,Ermittle den Status der Zirkulationspumpe
+getPumpeStatusSolar,6552,1,RT,2053,effective definition,6552-1,Ermittle den Status der Umwaelzpumpe Solar
+getPumpeDrehzahlSolar,6552,1,RT,2053 20CB,effective definition,6552-1,Ermittle die Drehzahl der Internen Pumpe
+getPumpeStatusSolar2,6553,1,RT,2053,effective definition,6553-1,Ermittle den Status der Pumpe 2 Solar
+getPumpeStatusSolar3,6554,1,RT,2053,effective definition,6554-1,Ermittle den Status der Pumpe 3 Solar
+getPumpeStatusSolar4,6555,1,RT,2053,effective definition,6555-1,Ermittle den Status der Pumpe 4 Solar
+getTempSTSSOL,081A,2,UT,2053 2098,effective definition,081A-2,Ermittle die Speichertemperatur in Grad C (NRF_TiefpassTemperaturwert_STSSOL)
+getMischerM1,254C,1,PR,2053,effective definition,254C-1,Ermittle Mischerposition M1
+getMischerM2,354C,1,PR,2053 20CB,effective definition,354C-1,Ermittle Mischerposition M2
+getMischerM3,454C,1,PR,2053,effective definition,454C-1,Ermittle Mischerposition M3
+getBetriebArtHK1,B000,1,BA,2053,effective definition,B000-1,Betriebsart HK1
+getBetriebArt,2301,1,BA,2053,effective definition,2301-1,Betriebsart
+getBetriebArtHK2,B001,1,BA,2053,effective definition,B001-1,Betriebsart HK2
+getJAZ,1680,2,CO,,effective definition,1680-2,Jahresarbeitszahl
+getJAZHeiz,1681,2,CO,,effective definition,1681-2,Jahresarbeitszahl
+getJAZWW,1682,2,CO,,shadowed definition,1682-2,Jahresarbeitszahl
+getBetriebSparM1,2302,1,RT,2053,effective definition,2302-1,Betriebsart Spar M1
+getBetriebSparM2,3302,1,RT,2053,effective definition,3302-1,Betriebsart Spar M2
+getBetriebPartyM1,2303,1,RT,2053,effective definition,2303-1,Betriebsart Party HK1
+getBetriebPartyM2,3303,1,RT,2053,effective definition,3303-1,Betriebsart Party HK2
+getTempPartyHK1,2022,1,ST,2053,effective definition,2022-1,Solltemperatur Partybetrieb HK1
+getTempPartyHK2,3022,1,ST,,effective definition,3022-1,Solltemperatur Partybetrieb HK2
+getEinflussExtSperren,5732,1,ST,,effective definition,5732-1,Einfluss Extern Sperren auf Pumpen
+getEinflussExtAnforderung,5734,1,ST,,effective definition,5734-1,Einfluss Externe Anforderung auf Pumpen
+getExtSperren,0A81,1,RT,,effective definition,0A81-1,Ist Extern Sperren aktiv
+getExtAnforderung,0A80,1,RT,,effective definition,0A80-1,Ist Externe Anforderung aktiv
+getStatusFrostM1,2500,1,ST,2053,effective definition,2500-1,Status Frostwarnung M1
+getStatusFrostM2,3500,1,ST,2053,effective definition,3500-1,Status Frostwarnung M2
+getStatusStoerung,7579,1,RT,2053 20CB,effective definition,7579-1,Status Sammelstoerung
+getError0,7507,9,ES,2053,effective definition,7507-9,Ermittle Fehlerhistory Eintrag 1
+getError1,7510,9,ES,2053,effective definition,7510-9,Ermittle Fehlerhistory Eintrag 2
+getError2,7519,9,ES,2053,effective definition,7519-9,Ermittle Fehlerhistory Eintrag 3
+getError3,7522,9,ES,2053,effective definition,7522-9,Ermittle Fehlerhistory Eintrag 4
+getError4,752B,9,ES,2053,effective definition,752B-9,Ermittle Fehlerhistory Eintrag 5
+getError5,7534,9,ES,2053,effective definition,7534-9,Ermittle Fehlerhistory Eintrag 6
+getError6,753D,9,ES,2053,effective definition,753D-9,Ermittle Fehlerhistory Eintrag 7
+getError7,7546,9,ES,2053,effective definition,7546-9,Ermittle Fehlerhistory Eintrag 8
+getError8,754F,9,ES,2053,effective definition,754F-9,Ermittle Fehlerhistory Eintrag 9
+getError9,7558,9,ES,2053,effective definition,7558-9,Ermittle Fehlerhistory Eintrag 10
+getSystemTime,088E,8,TI,2053,effective definition,088E-8,Ermittle Systemzeit
+getKA5,27A5,1,UTI,,effective definition,27A5-1,Ermittle die Heizkreispumpenlogik−Funktion
+getKA5M2,37A5,1,UTI,,effective definition,37A5-1,Ermittle die Heizkreispumpenlogik−Funktion M2
+getKA5M3,47A5,1,UTI,,effective definition,47A5-1,Ermittle die Heizkreispumpenlogik−Funktion M3
+getKA6,27A6,1,UTI,,effective definition,27A6-1,Ermittle die AbsolutSommersparschaltung
+getKA6M2,37A6,1,UTI,,effective definition,37A6-1,Ermittle die AbsolutSommersparschaltung M2
+getKA6M3,47A6,1,UTI,,effective definition,47A6-1,Ermittle die AbsolutSommersparschaltung M3
+getKonfiWirkung_aufPumpe,37A8,1,ST,,effective definition,37A8-1,Ermittle Einfluss Mischer auf int UWP
+getKA3_KonfiFrostgrenzeM1_GWG,27A3,1,UTI,,effective definition,27A3-1,Ermittle die eingestellte Frostgrenze A1M1
+getKA3_KonfiFrostgrenzeM2_GWG,37A3,1,UTI,,effective definition,37A3-1,Ermittle die eingestellte Frostgrenze
+getRaum,2000,2,UT,2053,effective definition,2000-2,RaumtemperaturSol
+getRaum2,3000,2,UT,2053,effective definition,3000-2,RaumtemperaturSol2
+getTimerWWMo,2100,8,CT,2053,effective definition,2100-8,Schaltzeit Montag Warmwasser setzen
+getDevType,00F8,8,DT,,effective definition,00F8-8,Ermittle Device Typ der Anlage / SystemIdent_SX
+getCtrlId,00F9,7,DT,,effective definition,00F9-7,Reglerkennung
+getInventory,08E0,7,SN,,effective definition,08E0-7,Sachnummer
+getInvCodePlug,1010,7,SN,,effective definition,1010-7,Sachnummer Codierstecker
+getPanelSWIndex,7330,8,DT,,effective definition,7330-8,Bedienteil SW Index
+getKsCardType,7656,4,DT,,effective definition,7656-4,KS Karte Typ
+getAnlagenschema,7700,2,ST,,effective definition,7700-2,Ermittle das Anlagenschema
+init,,,,2053,unavailable by name,,Inintialisierung
+getPumpeSollM1,,,,2053,unavailable by name,,Ermittle Solldrehzahl Pumpe M1
+getUmschaltventil,0A10,1,USV,2098 2053,effective definition,0A10-1,Ermittle den Status des Umschaltventils WW/Heizen
+getTempRueck,,,,2053,unavailable by name,,Ermittle die Rueckauftemepratur
+getGeraetekennung,00F8,2,CS,2053,effective definition,00F8-2,Geraetekennung
+getBetriebsmodus,B000,1,BA,2053,effective definition,B000-1,Betriebsmodus
+getManuellerModus,B020,1,ST,2053,shadowed definition,B020-1,Manueller Modus
+getFreigabeWasserElektro,6015,1,ST,2053,effective definition,6015-1,Freigabe Wasser Elektro
+getFreigabeHeizenElektro,7902,1,ST,2053,effective definition,7902-1,Freigabe Heizen Elektro
+getFreigabeDurchlauferh,7900,1,ST,2053,effective definition,7900-1,Freigabe Durchlauferhitzer
+getFreigabeKuehlung,71FE,1,ST,2053,effective definition,71FE-1,Freigabe Kuehlung
+getStatusVerdichter,0400,1,ST,2053,shadowed definition,0480-1,Status Verdichter
+getStatusVentilatorstufe1,0402,1,ST,2053,effective definition,0402-1,Status Ventilatorstufe 1
+getStatusVentilatorstufe2,0404,1,ST,2053,effective definition,0404-1,Status Ventilatorstufe 2
+getStatusDurchlauferhStufe1,0408,1,ST,2053,effective definition,0408-1,Status Durchlauferhitzer Stufe 1
+getStatusDurchlauferhStufe2,0409,1,ST,2053,effective definition,0409-1,Status Durchlauferhitzer Stufe 2
+getStatusHKUmkehrCool,041C,1,ST,2053,effective definition,041C-1,Status HK UmkehrCool
+getStatusPumpeHeizkreisA1,040D,1,ST,2053,effective definition,040D-1,Status Pumpe Heizkreis A1
+getStatusZusatzausgangZPumpe,0410,1,ST,2053,effective definition,0410-1,Status Zusatzausgang ZPumpe
+getStatusUmschaltventilHWW,0414,1,USV,2053,effective definition,0414-1,Status Umschaltventil H WW
+getStatusSpeicherladepumpe,0416,1,ST,2053,effective definition,0416-1,Status Speicherladepumpe
+getStatusKaeltekreisumkehr,049C,1,ST,2053,effective definition,049C-1,Status Kaeltekreisumkehr
+getStatusSammelmeldung,0411,1,ST,2053,effective definition,0411-1,Status Sammelmeldung
+getAussentemperatur,0101,2,UT,2053,effective definition,0101-2,Aussentemperatur
+getRaumtemperaturIst,0116,2,UT,2053,effective definition,0116-2,Raumtemperatur Ist
+getAussentemperaturRegelung,0952,2,UT,2053,effective definition,0952-2,Aussentemperatur Regelung
+getBrauchwassertemperaturOben,010D,2,UT,2053,effective definition,010D-2,Brauchwassertemperatur Oben
+getHysterreseWWWP,6007,2,UT,2053,effective definition,6007-2,Hysterrese WW WP
+getHysterreseWWElektro,6008,2,UT,2053,effective definition,6008-2,Hysterrese WW Elektro
+getBrauchwassertemperaturSoll,6000,2,UT,2053,effective definition,6000-2,Brauchwassertemperatur Soll
+getBrauchwassertemperatur2Soll,600C,2,UT,2053,effective definition,600C-2,Brauchwassertemperatur 2 Soll
+getRaumtemperaturSoll,2000,2,UT,2053,effective definition,2000-2,Raumtemperatur Soll
+getRedRaumtemperaturSoll,2001,2,UT,2053,effective definition,2001-2,Reduzierte Raumtemperatur Soll
+getPartyRaumtemperaturSoll,2022,2,UT,2053,effective definition,2022-2,Party Raumtemperatur Soll
+getHeizkennlinieNiveau,2006,2,UT,2053,effective definition,2006-2,Heizkennlinie Niveau
+getHeizkennlinieSteigung,2007,2,UN,2053,effective definition,2007-2,Heizkennlinie Steigung
+getRaumtemperaturaufschaltung,200A,1,ST,2053,effective definition,200A-1,Raumtemperaturaufschaltung
+getKuehlkennlinieNiveau,7110,2,UT,2053,shadowed definition,7110-4,Kuehlkennlinie Niveau
+getKuehlkennlinieSteigung,7111,2,UN,2053,shadowed definition,7111-4,Kuehlkennlinie Steigung
+getMinVLTempKuehlung,7103,2,UT,2053,shadowed definition,7103-4,Min VL Temp Kuehlung
+getEinfTempAufschaltungKuehl,7104,2,UT,2053,effective definition,7104-2,Einfluss Temp Aufschaltung Kuehl
+getTemperaturDifferenzHeizung,7003,2,UT,2053,effective definition,7003-2,Temperaturdifferenz Heizung
+getTemperaturDifferenzKuehlung,7004,2,UT,2053,effective definition,7004-2,Temperaturdifferenz Kuehlung
+getTemperaturVerdampfer,0102,2,UT,2053,effective definition,0102-2,Temperatur Verdampfer
+getPrimaerkreisVLtempLuft,0103,2,UT,2053,effective definition,0103-2,Primaerkreis VL Temp Luft
+getPrimaerkreisRLtempLuft,0104,2,UT,2053,effective definition,0104-2,Primaerkreis RL Temp Luft
+getPrimaerkreisVLtempWasser,0105,2,UT,2053,effective definition,0105-2,Primaerkreis VL Temp Wasser
+getPrimaerkreisRLtempWasser,0106,2,UT,2053,effective definition,0106-2,Primaerkreis RL Temp Wasser
+getDruckVerdampfer,0680,2,PR,2053,effective definition,0680-2,Druck im Verdampfer
+getDruckKondensator,0682,2,PR,2053,effective definition,0682-2,Druck im Kondensator
+getBelastung2232K,1622,2,UT,2053,effective definition,1622-2,Belastung 22-32K
+getBelastung3241K,1624,2,UT,2053,effective definition,1624-2,Belastung 32-41K
+getBelastung4250K,1626,2,UT,2053,effective definition,1626-2,Belastung 42-50K
+getBelastung5199K,1628,2,UT,2053,effective definition,1628-2,Belastung 51-99K
+getBetriebsstdVerdichter,0580,4,CS,2053,effective definition,0580-4,Betriebsstunden Verdichter
+getBetriebsstdVentilatorstufe1,0582,4,CS,2053,effective definition,0582-4,Betriebsstunden Ventilatorstufe 1
+getBetriebsstdVentilatorstufe2,0584,4,CS,2053,effective definition,0584-4,Betriebsstunden Ventilatorstufe 2
+getBetriebsstdDurchlauferh1,0588,4,CS,2053,effective definition,0588-4,Betriebsstunden Durchlauferhitzer 1
+getBetriebsstdDurchlauferh2,0589,4,CS,2053,effective definition,0589-4,Betriebsstunden Durchlauferhitzer 2
+getBetriebsstdHeizkreisA1,058D,4,CS,2053,effective definition,058D-4,Betriebsstunden Heizkreis A1
+getBetriebsstdZPumpe,058E,4,CS,2053,effective definition,058E-4,Betriebsstunden Z-Pumpe
+getBetriebsstdSammelmeldung,058F,4,CS,2053,effective definition,058F-4,Betriebsstunden Sammelmeldung
+getBetriebsstdVentilWW,0594,4,CS,2053,effective definition,0594-4,Betriebsstunden Ventil WW
+getBetriebsstdSpeicherpumpe,0596,4,CS,2053,effective definition,0596-4,Betriebsstunden Speicherpumpe
+getBetriebsstdActiveCooling,059C,4,CS,2053,effective definition,059C-4,Betriebsstunden Active Cooling
+getEinschaltVerdichter,0500,4,CO,2053,effective definition,0500-4,Einschaltungen Verdichter
+getEinschaltPrimaerquelle,0502,4,CO,2053,effective definition,0502-4,Einschaltungen Primaerquelle
+getEinschaltSekundaerquelle,0504,4,CO,2053,effective definition,0504-4,Einschaltungen Sekundaerquelle
+getVerdichterUmkehrungen,051C,4,CO,2053,effective definition,051C-4,Verdichter Umkehrungen
+getHysterreseVerdichter,7304,4,UT,2053,effective definition,7304-4,Hysterrese Verdichter
+getEinschaltDurchlauferh1,0508,4,CO,2053,effective definition,0508-4,Einschaltungen Durchlauferhitzer 1
+getEinschaltDurchlauferh2,0509,4,CO,2053,effective definition,0509-4,Einschaltungen Durchlauferhitzer 2
+getEinschaltHeizkreisA1,050D,4,CO,2053,effective definition,050D-4,Einschaltungen Heizkreis A1
+getEinschaltZPumpe,0510,4,CO,2053,effective definition,0510-4,Einschaltungen Z-Pumpe
+getEinschaltSammelmeldung,0511,4,CO,2053,effective definition,0511-4,Einschaltungen Sammelmeldung
+getEinschaltVentilWW,0514,4,CO,2053,effective definition,0514-4,Einschaltungen Ventil WW
+getEinschaltSpeicherpumpe,0516,4,CO,2053,effective definition,0516-4,Einschaltungen Speicherpumpe
+getJAZGesamt,1680,2,UTH,2053,effective definition,1680-2,JAZ Gesamt
+getJAZHeizen,1681,2,UTH,2053,shadowed definition,1681-2,JAZ Heizen
+getJAZWW,1682,2,UTH,2053,shadowed definition,1682-2,JAZ Warmwasser
+getCOPWW,1691,2,UTH,2053,shadowed definition,1691-2,COP Warmwasser
+getCOPHeizen,1690,2,UTH,2053,shadowed definition,1690-2,COP Heizen
+getElektroEnergieWW12M,1670,4,COL,2053,effective definition,1670-4,Elektroenergie WW 12M
+getElektroEnergieHeizen12M,1660,4,COL,2053,effective definition,1660-4,Elektroenergie Heizen 12M
+getWaermeEnergieWW12M,1650,4,COL,2053,effective definition,1650-4,Waermeenergie WW 12M
+getWaermeEnergieHeizen12M,1640,4,COL,2053,effective definition,1640-4,Waermeenergie Heizen 12M
+getElektroEnergieWW1W,16D0,2,CS,2053,effective definition,16D0-2,Elektroenergie WW 1W
+getElektroEnergieHeizen1W,16D1,2,CS,2053,effective definition,16D1-2,Elektroenergie Heizen 1W
+getWaermeEnergieWW1W,16D2,2,CS,2053,effective definition,16D2-2,Waermeenergie WW 1W
+getWaermeEnergieHeizen1W,16D3,2,CS,2053,effective definition,16D3-2,Waermeenergie Heizen 1W
+getHeizleistung,16A0,4,VS,2053,shadowed definition,16A0-4,Heizleistung
+getLeistungsaufnahme,16A4,4,VS,2053,shadowed definition,16A4-4,Leistungsaufnahme
+getMittlEingangstempLuft,16B0,2,UT,2053,effective definition,16B0-2,Mittlere Eingangstemperatur Luft
+getMittlAusgangstempLuft,16B1,2,UT,2053,effective definition,16B1-2,Mittlere Ausgangstemperatur Luft
+getOnOff,0012,1,ST,2053,effective definition,0012-1,On/Off ESPEasy
+getEVU,0004,1,ST,2053,effective definition,0004-1,EVU Sperre ESPEasy
+getAussentemperatur1,0800,2,UT,2053,effective definition,0800-2,Aussentemperatur 1
+getAussentemperatur2,0801,2,UT,2053,effective definition,0801-2,Aussentemperatur 2
+getAussentemperatur3,0805,2,UT,2053,effective definition,0805-2,Aussentemperatur 3
+getAussentemperatur4,081D,2,UT,2053,effective definition,081D-2,Aussentemperatur 4
+getAussentemperatur5,081E,2,UT,2053,effective definition,081E-2,Aussentemperatur 5
