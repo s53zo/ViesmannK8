@@ -1,0 +1,1591 @@
+{
+  "uid": "vito-2048-telemetry-v2",
+  "title": "Viessmann · Heat pump telemetry",
+  "description": "Acquisition-time telemetry from the Vitocal 2048 reader.",
+  "editable": true,
+  "timezone": "browser",
+  "tags": [
+    "Viessmann",
+    "Optolink"
+  ],
+  "schemaVersion": 39,
+  "refresh": "30s",
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "register",
+        "datasource": {
+          "type": "influxdb",
+          "uid": "deasq3bzjrx8ge"
+        },
+        "query": "SHOW TAG VALUES FROM \"vito_observation_v2\" WITH KEY = \"register\" WHERE \"device\" = 'vitocal-2048'",
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "refresh": 1,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": []
+      },
+      {
+        "type": "custom",
+        "name": "confidence",
+        "query": "verified,provisional,unknown",
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [
+          {
+            "text": "verified",
+            "value": "verified",
+            "selected": false
+          },
+          {
+            "text": "provisional",
+            "value": "provisional",
+            "selected": false
+          },
+          {
+            "text": "unknown",
+            "value": "unknown",
+            "selected": false
+          }
+        ]
+      },
+      {
+        "type": "custom",
+        "name": "quality",
+        "query": "ok,provisional,unmapped,sentinel,timeout,read_error,partial",
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [
+          {
+            "text": "ok",
+            "value": "ok",
+            "selected": false
+          },
+          {
+            "text": "provisional",
+            "value": "provisional",
+            "selected": false
+          },
+          {
+            "text": "unmapped",
+            "value": "unmapped",
+            "selected": false
+          },
+          {
+            "text": "sentinel",
+            "value": "sentinel",
+            "selected": false
+          },
+          {
+            "text": "timeout",
+            "value": "timeout",
+            "selected": false
+          },
+          {
+            "text": "read_error",
+            "value": "read_error",
+            "selected": false
+          },
+          {
+            "text": "partial",
+            "value": "partial",
+            "selected": false
+          }
+        ]
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "Compressor cycling",
+      "collapsed": false,
+      "panels": [],
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      },
+      "id": 1
+    },
+    {
+      "id": 2,
+      "title": "Controller totals",
+      "type": "timeseries",
+      "description": "Cumulative starts and hours reported by the controller. The runtime register stores seconds. A fall in either total indicates a reset.",
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Starts",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"counter_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4' GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Runtime",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"counter_value\") / 3600 FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0580-4' GROUP BY time($__interval) fill(null)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineInterpolation": "stepAfter"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Runtime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "h"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 3,
+      "title": "Starts by hour and day",
+      "type": "timeseries",
+      "description": "Each increase is assigned to the bucket containing its later observation. The first observation in the selected window is the baseline. A counter drop is excluded. UTC day boundaries; edge buckets may be partial.",
+      "gridPos": {
+        "x": 12,
+        "y": 1,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Starts / 1h",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT sum(\"increase\") FROM (SELECT non_negative_difference(\"counter_value\") AS \"increase\" FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4') GROUP BY time(1h) fill(none)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Starts / 1d",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT sum(\"increase\") FROM (SELECT non_negative_difference(\"counter_value\") AS \"increase\" FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4') GROUP BY time(1d) fill(none)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "unit": "short",
+          "custom": {
+            "drawStyle": "bars"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 4,
+      "title": "Whole-house power and observed starts",
+      "type": "timeseries",
+      "description": "Power includes all household loads. A positive point counts starts since the prior successful poll. A negative point indicates a reset. The time marks the read, not the physical start.",
+      "gridPos": {
+        "x": 0,
+        "y": 9,
+        "w": 16,
+        "h": 8
+      },
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "fe9liwluvfev4d"
+          },
+          "refId": "A",
+          "alias": "Whole house",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT mean(\"value\") FROM \"house\" WHERE $timeFilter GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Counter change",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT difference(\"counter_value\") AS \"increase\" FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4'"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Counter change"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Starts"
+              },
+              {
+                "id": "custom.showPoints",
+                "value": "always"
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 0
+              },
+              {
+                "id": "custom.pointSize",
+                "value": 5
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 5,
+      "title": "Minutes per start · selected window",
+      "type": "stat",
+      "description": "Change in runtime seconds divided by 60 and by starts. Uses first and last valid samples inside the range. Requires a start, no counter decrease, readings within 90 seconds of both edges, and gaps at most 90 seconds. Runs spanning a boundary contribute partial runtime.",
+      "gridPos": {
+        "x": 16,
+        "y": 9,
+        "w": 8,
+        "h": 8
+      },
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q1",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"counter_value\") - first(\"counter_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4' AND \"counter_value\" >= 0"
+        },
+        {
+          "refId": "R1",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q1",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q2",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT min(v) FROM (SELECT difference(\"counter_value\") AS v FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4' AND \"counter_value\" >= 0)"
+        },
+        {
+          "refId": "R2",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q2",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q3",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT max(v) FROM (SELECT elapsed(\"counter_value\", 1s) AS v FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4' AND \"counter_value\" >= 0)"
+        },
+        {
+          "refId": "R3",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q3",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q4",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT count(\"counter_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4' AND \"counter_value\" >= 0 AND time <= ${__from}ms + 90s"
+        },
+        {
+          "refId": "R4",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q4",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q5",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT count(\"counter_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4' AND \"counter_value\" >= 0 AND time >= ${__to}ms - 90s"
+        },
+        {
+          "refId": "R5",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q5",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q6",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"counter_value\") - first(\"counter_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0580-4' AND \"counter_value\" >= 0"
+        },
+        {
+          "refId": "R6",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q6",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q7",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT min(v) FROM (SELECT difference(\"counter_value\") AS v FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0580-4' AND \"counter_value\" >= 0)"
+        },
+        {
+          "refId": "R7",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q7",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q8",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT max(v) FROM (SELECT elapsed(\"counter_value\", 1s) AS v FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0580-4' AND \"counter_value\" >= 0)"
+        },
+        {
+          "refId": "R8",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q8",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q9",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT count(\"counter_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0580-4' AND \"counter_value\" >= 0 AND time <= ${__from}ms + 90s"
+        },
+        {
+          "refId": "R9",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q9",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "Q10",
+          "alias": "sample",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT count(\"counter_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0580-4' AND \"counter_value\" >= 0 AND time >= ${__to}ms - 90s"
+        },
+        {
+          "refId": "R10",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "Q10",
+          "reducer": "last"
+        },
+        {
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "math",
+          "expression": "($R1 > 0) && ($R2 >= 0) && ($R3 <= 90) && ($R4 > 0) && ($R5 > 0) && ($R7 >= 0) && ($R8 <= 90) && ($R9 > 0) && ($R10 > 0)",
+          "refId": "Valid"
+        },
+        {
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "math",
+          "expression": "($R6 / 60) / $R1 * ($Valid / $Valid)",
+          "refId": "Result"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "noValue": "Insufficient coverage",
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "colorMode": "none",
+        "textMode": "value",
+        "graphMode": "none"
+      },
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "Result"
+          }
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "Operating mode and auxiliary heat",
+      "collapsed": false,
+      "panels": [],
+      "gridPos": {
+        "x": 0,
+        "y": 17,
+        "w": 24,
+        "h": 1
+      },
+      "id": 6
+    },
+    {
+      "id": 7,
+      "title": "Operating state",
+      "type": "state-timeline",
+      "description": "Valve text is reported by the controller. The four numbered register interpretations need confirmation against the installed unit. Blank intervals have no observation. State changes are localised to the poll interval.",
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 15,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Heating / DHW valve",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"text_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0414-1' GROUP BY time(30s) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Primary-side output · provisional",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0402-1' GROUP BY time(30s) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "C",
+          "alias": "Secondary-side output · provisional",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0404-1' GROUP BY time(30s) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "D",
+          "alias": "Auxiliary stage 1 · provisional",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0408-1' GROUP BY time(30s) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "E",
+          "alias": "Auxiliary stage 2 · provisional",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0409-1' GROUP BY time(30s) fill(null)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Off",
+                  "color": "dark-blue"
+                },
+                "1": {
+                  "text": "On",
+                  "color": "green"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "mergeValues": true,
+        "rowHeight": 0.8,
+        "showValue": "never",
+        "legend": {
+          "showLegend": false
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 8,
+      "title": "Auxiliary heater totals",
+      "type": "timeseries",
+      "description": "Starts and accumulated operating time for the two heater stages. Both stages can operate together. Hours are calculated from raw seconds.",
+      "gridPos": {
+        "x": 15,
+        "y": 18,
+        "w": 9,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Stage 1 starts",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"counter_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0508-4' GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Stage 2 starts",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"counter_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0509-4' GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "C",
+          "alias": "Stage 1 runtime",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"counter_value\") / 3600 FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0588-4' GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "D",
+          "alias": "Stage 2 runtime",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"counter_value\") / 3600 FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0589-4' GROUP BY time($__interval) fill(null)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineInterpolation": "stepAfter"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Stage 1 runtime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "h"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Stage 2 runtime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "h"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "type": "row",
+      "title": "Temperatures and hydraulics",
+      "collapsed": false,
+      "panels": [],
+      "gridPos": {
+        "x": 0,
+        "y": 26,
+        "w": 24,
+        "h": 1
+      },
+      "id": 9
+    },
+    {
+      "id": 10,
+      "title": "Source fluid",
+      "type": "timeseries",
+      "description": "Orientation awaits controller and plumbing confirmation.",
+      "gridPos": {
+        "x": 0,
+        "y": 27,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Entering heat pump · provisional",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0103-2' GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Leaving heat pump · provisional",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0104-2' GROUP BY time($__interval) fill(null)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 11,
+      "title": "Secondary water and DHW",
+      "type": "timeseries",
+      "description": "Compare M2 supply target only while that circuit is active. DHW temperatures belong to the tank.",
+      "gridPos": {
+        "x": 12,
+        "y": 27,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Secondary supply",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0105-2' GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Secondary return",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0106-2' GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "C",
+          "alias": "M2 supply target",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '1801-2' GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "D",
+          "alias": "DHW upper tank",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '010D-2' GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "E",
+          "alias": "DHW target",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '6000-2' GROUP BY time($__interval) fill(null)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 12,
+      "title": "Source ΔT · entering minus leaving",
+      "type": "timeseries",
+      "description": "Difference between latest successful reads in the same 15-second UTC bucket. No calculation for buckets lacking either value. Pair separation is less than 15 seconds; valid pairs across a bucket boundary can be omitted.",
+      "gridPos": {
+        "x": 0,
+        "y": 35,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Temperature",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0103-2' GROUP BY time(15s) fill(none)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Temperature",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0104-2' GROUP BY time(15s) fill(none)"
+        },
+        {
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "math",
+          "expression": "$A - $B",
+          "refId": "Difference"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "custom": {
+            "lineWidth": 0,
+            "showPoints": "always",
+            "pointSize": 4
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "Difference"
+          }
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Secondary ΔT · supply minus return",
+      "type": "timeseries",
+      "description": "Difference between latest successful reads in the same 15-second UTC bucket. No calculation for buckets lacking either value. Pair separation is less than 15 seconds; valid pairs across a bucket boundary can be omitted.",
+      "gridPos": {
+        "x": 12,
+        "y": 35,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Temperature",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0105-2' GROUP BY time(15s) fill(none)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Temperature",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"numeric_value\") FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0106-2' GROUP BY time(15s) fill(none)"
+        },
+        {
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "math",
+          "expression": "$A - $B",
+          "refId": "Difference"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "custom": {
+            "lineWidth": 0,
+            "showPoints": "always",
+            "pointSize": 4
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "Difference"
+          }
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "Energy and efficiency",
+      "collapsed": false,
+      "panels": [],
+      "gridPos": {
+        "x": 0,
+        "y": 43,
+        "w": 24,
+        "h": 1
+      },
+      "id": 14
+    },
+    {
+      "id": 15,
+      "title": "Energy channels awaiting validation",
+      "type": "table",
+      "description": "Weekly energy registers previously returned FF FF. Confirm scale, units and accumulation interval for heat and electricity before calculating COP. Text and raw bytes are retained for inspection.",
+      "gridPos": {
+        "x": 0,
+        "y": 44,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "",
+          "rawQuery": true,
+          "resultFormat": "table",
+          "query": "SELECT \"register\",\"name\",\"confidence\",\"quality\",\"raw_hex\",\"numeric_value\",\"counter_value\",\"text_value\",\"decoder_version\" FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" =~ /^(16D[0-3]|1680)-2$/ ORDER BY time DESC LIMIT 60"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {},
+      "transformations": []
+    },
+    {
+      "type": "row",
+      "title": "Reader health and register explorer",
+      "collapsed": false,
+      "panels": [],
+      "gridPos": {
+        "x": 0,
+        "y": 52,
+        "w": 24,
+        "h": 1
+      },
+      "id": 16
+    },
+    {
+      "id": 17,
+      "title": "Reads and failures",
+      "type": "timeseries",
+      "description": "Reader process totals reset when the reader restarts.",
+      "gridPos": {
+        "x": 0,
+        "y": 53,
+        "w": 8,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Successful reads",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"reads_ok\") FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Failed reads",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"reads_failed\") FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "C",
+          "alias": "Dropped observations",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"dropped\") FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 18,
+      "title": "Latency and freshness",
+      "type": "timeseries",
+      "description": "All series are in seconds. Gaps in health points also indicate an unavailable reader or telemetry path.",
+      "gridPos": {
+        "x": 8,
+        "y": 53,
+        "w": 8,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Last serial read",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"last_latency_ms\") / 1000 FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Fast poll lateness",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"max_fast_lateness_s\") FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "C",
+          "alias": "Age of latest success",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"last_success_age_s\") FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "D",
+          "alias": "Oldest pending observation",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"oldest_backlog_age_s\") FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 19,
+      "title": "Catalogue coverage and spool",
+      "type": "timeseries",
+      "description": "The discovery queue operates between scheduled reads. Attempted counts can include unknown replies and errors.",
+      "gridPos": {
+        "x": 16,
+        "y": 53,
+        "w": 8,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Named register keys",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"catalogue_size\") FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "B",
+          "alias": "Keys attempted",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"attempted_registers\") FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "C",
+          "alias": "Queued observations",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT last(\"backlog\") FROM \"vito_reader_health_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter GROUP BY time($__interval) fill(null)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 20,
+      "title": "Compressor polling cadence",
+      "type": "timeseries",
+      "description": "Interval between successive valid start-counter observations, measured at acquisition. Retries and outages increase this interval.",
+      "gridPos": {
+        "x": 0,
+        "y": 61,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "Time between successful reads",
+          "rawQuery": true,
+          "resultFormat": "time_series",
+          "query": "SELECT elapsed(\"counter_value\",1s) FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" = '0500-4'"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 21,
+      "title": "Read errors in selected window",
+      "type": "table",
+      "description": "Latest 30 failed or partial attempts. Each row shows its acquisition timestamp and register.",
+      "gridPos": {
+        "x": 12,
+        "y": 61,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "",
+          "rawQuery": true,
+          "resultFormat": "table",
+          "query": "SELECT \"register\",\"name\",\"confidence\",\"quality\",\"raw_hex\",\"numeric_value\",\"counter_value\",\"text_value\",\"decoder_version\" FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"quality\" =~ /^(timeout|read_error|partial)$/ ORDER BY time DESC LIMIT 30"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {},
+      "transformations": []
+    },
+    {
+      "id": 22,
+      "title": "Register observations",
+      "type": "table",
+      "description": "Use the three selectors to inspect the latest 250 matching attempts in the selected range. Timestamp is UTC acquisition time displayed in browser timezone. A repeated byte pattern with fresh timestamps indicates repeated reads.",
+      "gridPos": {
+        "x": 0,
+        "y": 69,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "deasq3bzjrx8ge"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "deasq3bzjrx8ge"
+          },
+          "refId": "A",
+          "alias": "",
+          "rawQuery": true,
+          "resultFormat": "table",
+          "query": "SELECT \"register\",\"name\",\"confidence\",\"quality\",\"raw_hex\",\"numeric_value\",\"counter_value\",\"text_value\",\"decoder_version\" FROM \"vito_observation_v2\" WHERE \"device\" = 'vitocal-2048' AND $timeFilter AND \"register\" =~ /^${register:regex}$/ AND \"confidence\" =~ /^${confidence:regex}$/ AND \"quality\" =~ /^${quality:regex}$/ ORDER BY time DESC LIMIT 250"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {},
+      "transformations": []
+    }
+  ]
+}
