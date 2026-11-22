@@ -26,3 +26,13 @@ Allow the baseline unit's original 75-second startup delay. Confirm legacy MQTT 
 2. Inspect the reader health series and individual register qualities. A confirmed zero, undecoded replies and failed reads have different meanings. If legacy values appear frozen, check the MQTT message timestamp before interpreting a retained reading.
 3. Compare a v2 MQTT observation's register and UTC acquisition time with its Influx point. Check Node-RED's HTTP write result and acknowledgement path. During an Influx or MQTT outage the pending count and oldest unconfirmed age should grow, then fall after recovery. Check disk and overflow counters if backlog persists.
 4. Inspect Grafana's selected data source, range and register filter. An old dashboard's alias or database is not an independent measurement. Use the register catalogue and physical diagnostics when assigning an interpretation.
+
+## Capacity and timing
+
+The configured schedule covers 187 keys: three at 30 seconds, twelve at two minutes, four at three minutes, 43 at fifteen minutes and 125 at one hour. With one health point every 30 seconds, the nominal budget is 29,208 points per day, before timing jitter and error backoff. Vito's autogen policy currently retains these indefinitely. The existing Vito data directory measured about 33 MiB before rollout; that includes legacy data. Measure actual disk growth across a completed shard interval before projecting long-term compression or changing retention.
+
+On the netboot reader, SQLite keeps an exclusive single-writer lock and a persistent rollback journal. Capacity is 40,000 pending samples with a per-sample payload ceiling of 8 KiB. At the nominal rate this covers around 33 hours of downstream outage; it depends on the actual rate and available space. Once full, the oldest pending records are evicted and the dropped count increases. A NAS outage can also affect the reader's NFS root itself; the spool protects against broker/database service interruptions while that filesystem is available.
+
+## Serial-session recovery
+
+A debug client that disappears during an optical read can leave an old vcontrold worker writing to a closed socket. Symptoms observed during commissioning were consecutive timeouts and repeated SIGPIPE entries in /etc/vcontrold/vcontrol.log. The final reader handles SIGTERM at a transaction boundary, sends quit, drains the response and yields its connection after bounded batches. Use ordinary systemd stop/restart so this handshake can run. On a genuinely stuck daemon, stop the reader, restart vcontrold and verify a named read before restoring the reader. This interrupts telemetry; it must not send a heating control command.
