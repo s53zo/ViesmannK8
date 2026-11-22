@@ -55,7 +55,10 @@ def collect_and_crash(path, transcript):
 
 class OutageTests(unittest.TestCase):
     def test_crash_after_publish_before_database_ack(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        with self.subTest(scenario='reader restart'):
+            tmp = temporary.name
             path, transcript = Path(tmp)/'spool.sqlite3', Path(tmp)/'wire.json'
             child = subprocess.run([sys.executable, __file__, '--crash', str(path), str(transcript)],
                                    capture_output=True, text=True, timeout=120)
