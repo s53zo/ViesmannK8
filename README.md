@@ -1,6 +1,25 @@
 
 # Viessmann Heat Pump MQTT Bridge
 
+The active collector uses the v2 reader and the existing MQTT bridge on the 2048 controller. Start with the [heat-pump telemetry dashboard](http://10.0.1.8:3000/d/vito-2048-telemetry-v2/) on the LAN or the [operations guide](docs/operations.md).
+
+| Component | Source |
+|---|---|
+| Register coverage and evidence | [Register notes](docs/registers.md) and [full XML inventory](docs/register-coverage.csv) |
+| Polling, decoding and durable replay | [Reader](reader_v2.py) and [decoder](vito_catalog.py) |
+| Node-RED and InfluxDB v2 storage | [Ingestion contract and deployment](storage/README.md) |
+| Grafana panels and query semantics | [Dashboard guide](grafana/README.md) |
+| Deployment history and rollback | [Baseline](docs/runtime-baseline.md) and [operating instructions](docs/operations.md) |
+
+To run the offline regression suite from the repository root:
+
+```sh
+python3 -m unittest discover -s tests -v
+node storage/test_storage.js
+```
+
+## Legacy bridge and compatible MQTT topics
+
 A Python script that creates a bridge between a Viessmann heat pump system and MQTT, allowing for monitoring and control of the heat pump through MQTT messages. The script reads various parameters from the heat pump and publishes them to MQTT topics, while also allowing control commands to be sent through MQTT.
 
 ## Features
