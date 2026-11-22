@@ -19,6 +19,7 @@ MQTT_SET_TOPIC = f"{MQTT_BASE_TOPIC}/set/#"
 
 # Dictionary of commands and their English translations
 PLAUSIBLE_COMMANDS = {
+    "getEinschaltVerdichter": "Cumulative compressor starts",
     "getStatusQuellePri1": "Primary source status",
     "getStatusVentilWW": "DHW valve status",
     "getTempA": "Outside temperature",

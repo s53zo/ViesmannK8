@@ -1,17 +1,13 @@
 [Unit]
 Description=Vito MQTT Service
-After=network.target
+After=network-online.target
+Wants=network-online.target
 
 [Service]
-# Use the full path to python3 and your script
+ExecStartPre=/bin/sleep 75
 ExecStart=/usr/bin/python3 /home/s53zo/ViesmannK8/vito_mqtt.py
 Restart=always
-RestartSec=5  # Optional: wait 5 seconds before restarting
-
-# If your script needs to run from a specific directory, uncomment and set the following:
-# WorkingDirectory=/full/path/to/your/script/directory
-# Optionally, run as a specific user:
-# User=your_username
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
