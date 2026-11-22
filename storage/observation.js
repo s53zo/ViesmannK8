@@ -36,7 +36,7 @@ function prepare() {
     let series;
     if (p.register === '_health') {
         series = 'vito_reader_health_v2,device=' + p.device;
-        for (const key of ['reads_ok','reads_failed','backlog','dropped','catalogue_size','attempted_registers'])
+        for (const key of ['reads_ok','reads_failed','backlog','dropped','catalogue_size','attempted_registers','clock_synchronized'])
             number(key, true);
         for (const key of ['last_latency_ms','max_fast_lateness_s','last_success_age_s','oldest_backlog_age_s'])
             number(key);

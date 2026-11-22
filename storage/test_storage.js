@@ -19,6 +19,7 @@ assert.equal(write({...sample,raw_hex:'\ncorrupt'}),null);
 assert.equal(write({...sample,counter_value:1.2}),null);
 assert.equal(prepare({topic:'vito/telemetry/v2/0501-4',payload:sample},log),null);
 assert.match(write({...sample,register:'_health',backlog:0}).payload,/vito_reader_health_v2,device=vitocal-2048 backlog=0i/);
+assert.match(write({...sample,register:'_health',clock_synchronized:1}).payload,/clock_synchronized=1i/);
 assert.equal(ack({...point,statusCode:503},log),null);
 assert.equal(ack({...point,statusCode:'ETIMEDOUT'},log),null);
 assert.deepEqual(JSON.parse(ack({...point,statusCode:204},log).payload),{register:sample.register,observed_at:sample.observed_at});
