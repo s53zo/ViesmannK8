@@ -1,0 +1,19 @@
+unit off:
+
+getDevType:
+20 48 02 09 00 00 03 46
+getEinschaltVerdichter:
+51 9F 00 00
+getBetriebsstdVerdichter:
+0E 44 26 06
+getStatusUmschaltventilHWW:
+01
+getEnergieElektroHeizen1W:
+FF FF
+getEnergieElektroWW1W:
+FF FF
+getEnergieWaermeHeizen1W:
+FF FF
+getEnergieWaermeWW1W:
+FF FF
+unit on:
