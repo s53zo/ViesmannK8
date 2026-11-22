@@ -1,4 +1,7 @@
 import json
+import os
+import signal
+import time
 import socket
 import socketserver
 import tempfile
@@ -6,8 +9,9 @@ import threading
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
-from reader_v2 import Session, Spool, Schedule, observation, validated_control
+from reader_v2 import Session, Spool, Schedule, observation, validated_control, stop_after_read
 from vito_catalog import FAST, catalogue, decode
 
 
@@ -15,6 +19,9 @@ class Daemon(socketserver.StreamRequestHandler):
     def handle(self):
         self.wfile.write(b'vctrld>')
         while command := self.rfile.readline().strip():
+            if command == b'quit':
+                self.wfile.write(b'good bye!\n')
+                return
             if command == b'debug on':
                 self.wfile.write(b'vctrld>')
                 continue
@@ -66,6 +73,88 @@ class ReaderTests(unittest.TestCase):
                 session.close()
                 srv.shutdown()
                 thread.join()
+
+    def test_sigterm_finishes_active_reply_and_daemon_quit(self):
+        class DelayedDaemon(socketserver.StreamRequestHandler):
+            def handle(self):
+                self.wfile.write(b'vctrld>')
+                assert self.rfile.readline() == b'debug on\n'
+                self.wfile.write(b'vctrld>')
+                assert self.rfile.readline() == b'getEinschaltVerdichter\n'
+                os.kill(os.getpid(), signal.SIGTERM)
+                time.sleep(0.03)
+                self.wfile.write(FRAME+b'\nDEBUG: <RECV: received 51 9F 00 00\n40785\nvctrld>')
+                assert self.rfile.readline() == b'quit\n'
+                self.wfile.write(b'farewell\n')
+                self.server.retired.set()
+
+        for sig in (signal.SIGTERM, signal.SIGINT):
+            self.addCleanup(signal.signal, sig, signal.getsignal(sig))
+        stop = stop_after_read()
+        with socketserver.TCPServer(('127.0.0.1',0),DelayedDaemon) as srv:
+            srv.retired = threading.Event()
+            thread = threading.Thread(target=srv.handle_request)
+            thread.start()
+            try:
+                sess = Session(*srv.server_address)
+                sample, _ = observation(catalogue({})['0500-4'],sess)
+                self.assertTrue(stop.is_set())
+                self.assertEqual(sample['counter_value'],40785)
+                sess.close()
+                self.assertTrue(srv.retired.is_set())
+            finally:
+                thread.join(3)
+
+    def test_batch_releases_daemon_connection(self):
+        class CountSessions(Daemon):
+            def handle(self):
+                self.server.sessions += 1
+                super().handle()
+        with socketserver.TCPServer(('127.0.0.1',0),CountSessions) as srv:
+            srv.sessions = 0
+            srv.reply=FRAME+b'\nDEBUG: <RECV: received 51 9F 00 00\n40785\n'
+            thread = threading.Thread(target=srv.serve_forever)
+            thread.start()
+            sess = Session(*srv.server_address)
+            try:
+                with patch('reader_v2.BATCH_READ_LIMIT',2):
+                    for _ in range(3):
+                        sess.yield_if_due()
+                        sess.read('getEinschaltVerdichter','0500-4')
+                self.assertEqual(srv.sessions,2)
+            finally:
+                sess.close()
+                srv.shutdown()
+                thread.join()
+
+    def test_timeout_drains_late_debug_output(self):
+        class SlowDaemon(socketserver.StreamRequestHandler):
+            def handle(self):
+                self.wfile.write(b'vctrld>')
+                assert self.rfile.readline() == b'debug on\n'
+                self.wfile.write(b'vctrld>')
+                assert self.rfile.readline() == b'getEinschaltVerdichter\n'
+                # The client read expires while the daemon is still servicing it.
+                time.sleep(0.2)
+                self.wfile.write(b'DEBUG: late data\nvctrld>')
+                assert self.rfile.readline() == b'quit\n'
+                self.wfile.write(b'good bye\n')
+                self.server.finished.set()
+
+        with socketserver.TCPServer(('127.0.0.1',0),SlowDaemon) as srv:
+            srv.finished = threading.Event()
+            thread = threading.Thread(target=srv.handle_request)
+            thread.start()
+            try:
+                with patch('reader_v2.READ_TIMEOUT', 0.1):
+                    sess = Session(*srv.server_address)
+                    sample, value = observation(catalogue({})['0500-4'],sess)
+                self.assertIsNone(value)
+                self.assertEqual(sample['quality'],'timeout')
+                self.assertTrue(srv.finished.is_set())
+                self.assertIsNone(sess.sock)
+            finally:
+                thread.join(3)
 
     def test_timeout(self):
         class Timeout:

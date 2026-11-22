@@ -9,6 +9,8 @@ import subprocess
 from pathlib import Path
 from queue import Full, Queue
 import re
+import signal
+from threading import Event
 import socket
 import sqlite3
 import time
@@ -20,6 +22,8 @@ DEVICE = 'vitocal-2048'
 PREFIX = 'vito/telemetry/v2/'
 ACK = 'vito/ack/v2/' + DEVICE
 READ_TIMEOUT = 8
+DRAIN_TIMEOUT = 24
+BATCH_READ_LIMIT = 8
 MAX_PAYLOAD = 8192
 
 
@@ -32,11 +36,36 @@ class Session:
     def __init__(self, host='127.0.0.1', port=3002):
         self.host, self.port = host, port
         self.sock = None
+        self.reads_since_open = 0
+
+    def yield_if_due(self):
+        # vcontrold may retain the serial lock for the lifetime of the TCP session.
+        if self.reads_since_open >= BATCH_READ_LIMIT:
+            self.close()
 
     def close(self):
-        if self.sock:
-            self.sock.close()
-            self.sock = None
+        """Queue quit even after a timeout: vcontrold may still be writing its reply."""
+        sock, self.sock = self.sock, None
+        self.reads_since_open = 0
+        if sock is None:
+            return
+        deadline = time.monotonic() + DRAIN_TIMEOUT
+        try:
+            sock.settimeout(DRAIN_TIMEOUT)
+            sock.sendall(b'quit\n')
+            # Read through the pending command, final prompt and quit farewell. EOF
+            # confirms the daemon has closed its writer before we release the socket.
+            while True:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise TimeoutError('daemon quit deadline')
+                sock.settimeout(remaining)
+                if not sock.recv(8192):
+                    break
+        except OSError as exc:
+            LOG.warning('Daemon quit/drain failed: %s', exc)
+        finally:
+            sock.close()
 
     def reply(self):
         data = bytearray()
@@ -62,6 +91,7 @@ class Session:
             self.reply()
         self.sock.sendall((name+'\n').encode('ascii'))
         reply = self.reply()
+        self.reads_since_open += 1
         # Verify the KW2 frame actually sent by the daemon before attributing its bytes.
         sent = re.findall(r'>SENT: ([\da-fA-F]{2})',reply)
         addr, size = key.split('-')
@@ -240,6 +270,15 @@ def observation(reg,session):
     return out,formatted
 
 
+def stop_after_read():
+    stop = Event()
+    def request_stop(signum, frame):
+        stop.set()
+    signal.signal(signal.SIGTERM, request_stop)
+    signal.signal(signal.SIGINT, request_stop)
+    return stop
+
+
 def main():
     import paho.mqtt.client as mqtt
     import vito_mqtt as legacy
@@ -252,6 +291,7 @@ def main():
     regs=catalogue(commands)
     units=enum_units()
     spool=Spool(Path(args.state_dir)/'spool.sqlite3')
+    stop=stop_after_read()
     session=Session()
     client=mqtt.Client(client_id='vito-reader-v2')
     acks, controls=Queue(2048),Queue(8)
@@ -284,18 +324,22 @@ def main():
     seen=set()
     last_success=None
     health_due=0
+    daemon_retry_at=0
+    transport_failures=0
     def drain_acks():
         while not acks.empty():
             yield acks.get_nowait()
 
     try:
-        while True:
+        while not stop.is_set():
             now=time.monotonic()
             if not controls.empty():
                 submitted,(name,value)=controls.get_nowait()
                 if now-submitted<=15:
                     # Release the daemon client lock before the existing one-shot writer.
                     session.close()
+                    if stop.is_set():
+                        break
                     result=legacy.execute_vclient_command(f'{name} {value}')
                     if result is not None and 'ERR' not in result.upper():
                         legacy.publish_command_value(client,name,legacy.SETTABLE_PARAMETERS[name]['description'],value)
@@ -320,10 +364,16 @@ def main():
                 spool.put(health, drain_acks())
                 health_due=now+30
                 schedule.fast_lateness=0
+            session.yield_if_due()
+            if stop.is_set():
+                break
+            if time.monotonic() < daemon_retry_at:
+                stop.wait(0.25)
+                continue
             key=schedule.next(time.monotonic())
             if key is None:
                 session.close()
-                time.sleep(0.25)
+                stop.wait(0.25)
                 continue
             reg=regs[key]
             started=time.monotonic()
@@ -335,8 +385,12 @@ def main():
             seen.add(key)
             latency=sample['latency_ms']
             if not success:
+                if sample['quality'] == 'timeout':
+                    transport_failures = min(4, transport_failures + 1)
+                    daemon_retry_at = ended + 5 * 2**(transport_failures-1)
                 failed+=1
                 continue
+            transport_failures=0
             ok+=1
             last_success=ended
             if formatted is None:
@@ -355,6 +409,11 @@ def main():
                 legacy.publish_command_value(client,alias,description,value)
     finally:
         session.close()
+        if client.is_connected():
+            try:
+                client.publish('vito/status/v2/availability','offline',qos=1,retain=True).wait_for_publish(timeout=2)
+            except (ValueError, RuntimeError):
+                pass
         client.disconnect()
         client.loop_stop()
         spool.db.close()
