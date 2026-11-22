@@ -115,6 +115,43 @@ class ReaderTests(unittest.TestCase):
             self.assertEqual(s.stats()['dropped'],1)
             s.db.close()
 
+    def test_unmapped_valve_is_visible(self):
+        for byte in (0, 254):
+            session = SimpleNamespace(read=lambda *args: (bytes([byte]), 'UNKNOWN'))
+            sample, _ = observation(catalogue({})['0414-1'], session)
+            self.assertEqual(sample['quality'], 'unmapped')
+            self.assertEqual(sample['text_value'], f'Unknown (0x{byte:02X})')
+            self.assertEqual(sample['raw_hex'], f'{byte:02X}')
+
+    def test_transport_retry_only_changes_memory_and_batched_acks_allow_id_reuse(self):
+        sent = []
+        def publish(topic, body, qos, retain):
+            sent.append(json.loads(body)['counter_value'])
+            return SimpleNamespace(rc=0)
+
+        def msg(i):
+            return dict(register='0500-4', observed_at=f'2026-11-22T01:02:{i:02}.000000Z',
+                        counter_value=i)
+
+        client = SimpleNamespace(publish=publish)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp)/'spool.db'
+            s = Spool(path)
+            for i in range(20):
+                s.put(msg(i))
+            contents = path.read_bytes()
+            s.flush(client, 0)
+            s.flush(client, 0)
+            self.assertEqual(sent, list(range(20)))
+            self.assertEqual(path.read_bytes(), contents)
+            acks = [(msg(i)['register'],msg(i)['observed_at']) for i in range(20)]
+            s.put(msg(20), acks)
+            self.assertEqual(s.stats()['backlog'], 1)
+            s.flush(client, 1)
+            self.assertEqual(sent[-1], 20)
+            self.assertEqual(len(sent), 21)
+            s.db.close()
+
     def test_control_validation(self):
         params={'setRaum2':dict(type='numeric',min=0,max=30)}
         def request(value,retained=False,dup=False):

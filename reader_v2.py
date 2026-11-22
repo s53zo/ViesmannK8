@@ -90,42 +90,58 @@ class Spool:
         self.db.execute('PRAGMA locking_mode=EXCLUSIVE')
         self.db.execute('PRAGMA journal_mode=PERSIST')
         self.db.execute('PRAGMA synchronous=FULL')
+        self.db.execute('PRAGMA temp_store=MEMORY')
         self.db.executescript('''
             CREATE TABLE IF NOT EXISTS pending (
-                id INTEGER PRIMARY KEY, reg TEXT, ts TEXT, body TEXT,
-                next_try REAL NOT NULL DEFAULT 0, UNIQUE(reg,ts));
-            CREATE INDEX IF NOT EXISTS retry ON pending(next_try,id);
+                id INTEGER PRIMARY KEY, reg TEXT, ts TEXT, body TEXT, UNIQUE(reg,ts));
             CREATE TABLE IF NOT EXISTS stats (id INTEGER PRIMARY KEY, dropped INTEGER);
             INSERT OR IGNORE INTO stats VALUES (1,0);
+            CREATE TEMP TABLE delivery (id INTEGER PRIMARY KEY, next_try REAL NOT NULL);
+            CREATE INDEX temp.delivery_deadline ON delivery(next_try,id);
+            INSERT INTO delivery SELECT id,0 FROM pending;
         ''')
         self.capacity = capacity
-        # Monotonic retry times have process-local meaning.
-        with self.db:
-            self.db.execute('UPDATE pending SET next_try=0 WHERE next_try!=0')
 
-    def put(self, sample):
-        body=json.dumps(sample,allow_nan=False,separators=(',',':'))
-        if len(body.encode())>MAX_PAYLOAD:
+    def _delete_acknowledged(self, acknowledgements):
+        for reg, ts in acknowledgements:
+            self.db.execute(
+                'DELETE FROM delivery WHERE id=(SELECT id FROM pending WHERE reg=? AND ts=?)',
+                (reg, ts))
+            self.db.execute('DELETE FROM pending WHERE reg=? AND ts=?', (reg, ts))
+
+    def put(self, sample, acknowledgements=()):
+        body = json.dumps(sample, allow_nan=False, separators=(',', ':'))
+        if len(body.encode()) > MAX_PAYLOAD:
             raise ValueError('observation exceeds storage budget')
+        # Group end-to-end ACKs with the next mandatory durable acquisition write.
+        # On a crash, uncommitted ACKs cause idempotent retries from disk.
         with self.db:
-            self.db.execute('INSERT INTO pending(reg,ts,body) VALUES(?,?,?)',
-                            (sample['register'],sample['observed_at'],body))
-            excess=self.db.execute('SELECT count(*)-? FROM pending',(self.capacity,)).fetchone()[0]
-            if excess>0:
-                self.db.execute('DELETE FROM pending WHERE id IN (SELECT id FROM pending ORDER BY id LIMIT ?)',(excess,))
-                self.db.execute('UPDATE stats SET dropped=dropped+?',(excess,))
+            self._delete_acknowledged(acknowledgements)
+            row = self.db.execute('INSERT INTO pending(reg,ts,body) VALUES(?,?,?)',
+                                  (sample['register'], sample['observed_at'], body))
+            self.db.execute('INSERT INTO delivery VALUES(?,0)', (row.lastrowid,))
+            excess = self.db.execute('SELECT count(*)-? FROM delivery', (self.capacity,)).fetchone()[0]
+            if excess > 0:
+                self.db.execute('DELETE FROM delivery WHERE id IN '
+                                '(SELECT id FROM pending ORDER BY id LIMIT ?)', (excess,))
+                self.db.execute('DELETE FROM pending WHERE id IN '
+                                '(SELECT id FROM pending ORDER BY id LIMIT ?)', (excess,))
+                self.db.execute('UPDATE stats SET dropped=dropped+?', (excess,))
 
     def acknowledge(self, reg, ts):
         with self.db:
-            self.db.execute('DELETE FROM pending WHERE reg=? AND ts=?',(reg,ts))
+            self._delete_acknowledged([(reg, ts)])
 
     def flush(self, client, now):
-        rows=self.db.execute('SELECT id,reg,body FROM pending WHERE next_try<=? ORDER BY id LIMIT 16',(now,)).fetchall()
+        rows = self.db.execute(
+            'SELECT d.id,p.reg,p.body FROM delivery d JOIN pending p ON p.id=d.id '
+            'WHERE d.next_try<=? ORDER BY d.next_try,d.id LIMIT 16', (now,)).fetchall()
+        # Only the in-memory retry index changes after transport accepts a send.
         with self.db:
-            for ident,reg,body in rows:
-                if client.publish(PREFIX+reg,body,qos=1,retain=False).rc:
+            for ident, reg, body in rows:
+                if client.publish(PREFIX + reg, body, qos=1, retain=False).rc:
                     break
-                self.db.execute('UPDATE pending SET next_try=? WHERE id=?',(now+30,ident))
+                self.db.execute('UPDATE delivery SET next_try=? WHERE id=?', (now+30, ident))
 
     def stats(self):
         count, oldest=self.db.execute('SELECT count(*),min(ts) FROM pending').fetchone()
@@ -213,6 +229,8 @@ def observation(reg,session):
             formatted=None
         else:
             out.update(decode(reg.key,raw))
+            if reg.key == '0414-1' and out['quality'] == 'unmapped':
+                out['text_value'] = f'Unknown (0x{raw.hex().upper()})'
     except (OSError,ValueError) as exc:
         session.close()
         out['quality']='timeout' if isinstance(exc,TimeoutError) else 'read_error'
@@ -266,11 +284,13 @@ def main():
     seen=set()
     last_success=None
     health_due=0
+    def drain_acks():
+        while not acks.empty():
+            yield acks.get_nowait()
+
     try:
         while True:
             now=time.monotonic()
-            while not acks.empty():
-                spool.acknowledge(*acks.get_nowait())
             if not controls.empty():
                 submitted,(name,value)=controls.get_nowait()
                 if now-submitted<=15:
@@ -297,7 +317,7 @@ def main():
                         health['clock_synchronized']=int(sync=='yes')
                 except (OSError,subprocess.TimeoutExpired):
                     pass
-                spool.put(health)
+                spool.put(health, drain_acks())
                 health_due=now+30
                 schedule.fast_lateness=0
             key=schedule.next(time.monotonic())
@@ -311,7 +331,7 @@ def main():
             ended=time.monotonic()
             success=sample['quality'] not in ('partial','read_error','timeout')
             schedule.complete(key,started,ended,success)
-            spool.put(sample)
+            spool.put(sample, drain_acks())
             seen.add(key)
             latency=sample['latency_ms']
             if not success:

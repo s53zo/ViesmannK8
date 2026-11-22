@@ -95,14 +95,21 @@ def main():
     print(f"MQTT -> Influx -> Grafana: {ts} {msg['raw_hex']} = {counter} starts")
     window = f"WHERE {DEVICE_FILTER} AND time > now()-15m"
     for register in ("0500-4", "0580-4", "0414-1"):
-        samples = query(db, f'SELECT "quality" FROM {MEASUREMENT} {window} '
+        samples = query(db, f'SELECT "quality","raw_hex","text_value" FROM {MEASUREMENT} {window} '
                             f'AND "register"=\'{register}\' ORDER BY time DESC LIMIT 4')
         require(len(samples) >= 2, f"Need at least two recent samples for {register}")
         times = [utc(row["time"]) for row in samples]
         gaps = [(a-b).total_seconds() for a,b in zip(times, times[1:])]
         require((datetime.now(timezone.utc)-times[0]).total_seconds() <= args.max_gap, f"{register} stale")
-        require(all(row["quality"] in ("ok","provisional") for row in samples),
-                f"{register}: recent read error or uncertain decode: {samples}")
+        for row in samples:
+            if register == "0414-1" and row["quality"] == "unmapped":
+                require(re.fullmatch(r"[0-9A-F]{2}", row.get("raw_hex") or "")
+                        and int(row["raw_hex"], 16) not in (1, 2, 3)
+                        and row.get("text_value") in (None, f"Unknown (0x{row['raw_hex']})"),
+                        f"Uncertain diverter state must preserve raw byte: {row}")
+            else:
+                require(row["quality"] in ("ok", "provisional"),
+                        f"{register}: recent acquisition failure: {row}")
         require(max(gaps) <= args.max_gap, f"{register} gaps exceed target: {gaps}")
         print(f"{register}: median {statistics.median(gaps):.1f}s, maximum {max(gaps):.1f}s")
     sentinels = query(db, f'SELECT * FROM {MEASUREMENT} WHERE {DEVICE_FILTER} '
