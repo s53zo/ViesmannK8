@@ -58,7 +58,14 @@ def main():
     parser.add_argument("--host", default="10.0.1.8")
     parser.add_argument("--wait", type=int, default=90, help="seconds to wait for live MQTT")
     parser.add_argument("--max-gap", type=float, default=60, help="maximum fast sample gap in seconds")
+    parser.add_argument("--since", help="only accept samples acquired since this ISO deployment timestamp")
     args = parser.parse_args()
+    start_filter = ""
+    if args.since:
+        start = utc(args.since)
+        require(start.utcoffset() is not None, "--since needs a timezone")
+        timestamp = start.astimezone(timezone.utc).isoformat()
+        start_filter = f" AND time >= '{timestamp}'"
     require(args.wait > 0 and args.max_gap > 0, "Timeouts must be positive")
     db = f"http://{args.host}:8086"
     grafana = f"http://{args.host}:3000"
@@ -77,6 +84,8 @@ def main():
     ts = msg["observed_at"]
     require(re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,9})?Z", ts), "Non-UTC timestamp")
     age = (datetime.now(timezone.utc) - utc(ts)).total_seconds()
+    if args.since:
+        require(utc(ts) >= start, "Live observation predates requested deployment")
     require(-5 <= age <= args.max_gap, f"Stale/future acquisition: age {age:.1f} s")
     counter = msg["counter_value"]
     raw = bytes.fromhex(msg["raw_hex"])
@@ -93,7 +102,7 @@ def main():
         require(rows[0].get(key) == msg.get(key), f"MQTT/Influx mismatch in {key}")
     require(rows == query(proxy, select), "Grafana datasource returned different results")
     print(f"MQTT -> Influx -> Grafana: {ts} {msg['raw_hex']} = {counter} starts")
-    window = f"WHERE {DEVICE_FILTER} AND time > now()-15m"
+    window = f"WHERE {DEVICE_FILTER} AND time > now()-15m{start_filter}"
     for register in ("0500-4", "0580-4", "0414-1"):
         samples = query(db, f'SELECT "quality","raw_hex","text_value" FROM {MEASUREMENT} {window} '
                             f'AND "register"=\'{register}\' ORDER BY time DESC LIMIT 4')
@@ -113,7 +122,7 @@ def main():
         require(max(gaps) <= args.max_gap, f"{register} gaps exceed target: {gaps}")
         print(f"{register}: median {statistics.median(gaps):.1f}s, maximum {max(gaps):.1f}s")
     sentinels = query(db, f'SELECT * FROM {MEASUREMENT} WHERE {DEVICE_FILTER} '
-                          f'AND time > now()-24h AND "quality"=\'sentinel\' ORDER BY time DESC LIMIT 1')
+                          f'AND time > now()-24h{start_filter} AND "quality"=\'sentinel\' ORDER BY time DESC LIMIT 1')
     require(sentinels and sentinels[0].get("raw_hex"), "No raw sentinel sample in the last day")
     require(all(sentinels[0].get(k) is None for k in ("counter_value", "numeric_value")),
             "A sentinel was promoted to a numeric value")
@@ -121,7 +130,7 @@ def main():
             and sentinels[0]["raw_hex"] == "FFFF", "Unexpected weekly energy sentinel")
     print(f"Sentinel preserved: {sentinels[0]['register']} {sentinels[0]['raw_hex']}")
     identity = query(db, f'SELECT "raw_hex","text_value" FROM {MEASUREMENT} WHERE {DEVICE_FILTER} '
-                         f'AND "register"=\'00F8-8\' AND time > now()-24h ORDER BY time DESC LIMIT 1')
+                         f'AND "register"=\'00F8-8\' AND time > now()-24h{start_filter} ORDER BY time DESC LIMIT 1')
     require(identity and identity[0]["raw_hex"].startswith("2048")
             and identity[0]["text_value"] == "2048", "Missing recent 2048 hardware ID read")
     runtime = query(db, f'SELECT "raw_hex","counter_value" FROM {MEASUREMENT} {window} '
@@ -130,7 +139,7 @@ def main():
     require(runtime["counter_value"] == seconds, "Compressor runtime must retain integer seconds")
     print(f"Hardware {identity[0]['text_value']}, compressor runtime {seconds} s")
     health = query(db, f'SELECT * FROM "vito_reader_health_v2" WHERE {DEVICE_FILTER} '
-                       f'AND time > now()-2m ORDER BY time DESC LIMIT 1')
+                       f'AND time > now()-2m{start_filter} ORDER BY time DESC LIMIT 1')
     require(health and health[0].get("reads_ok", 0) > 0, "No fresh successful reader health report")
     print("Reader health:", json.dumps(health[0], sort_keys=True))
 
